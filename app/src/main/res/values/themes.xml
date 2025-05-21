@@ -13,4 +13,16 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <!-- Custom TextInputLayout Style -->
+    <style name="Widget.MealMate.TextInputLayout.OutlinedBox.Rounded" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/custom_text_input_outline_color</item>
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+        <!-- You can adjust hint text color if needed -->
+        <!-- <item name="hintTextColor">?attr/colorPrimary</item> -->
+    </style>
+
 </resources>
