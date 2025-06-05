@@ -22,4 +22,6 @@
     <string name="app_logo_description">MealMate App Logo</string>
     <string name="create_manage"><![CDATA[Create & manage]]></string>
     <string name="account_prefs"><![CDATA[Account & prefs]]></string>
+    <string name="find_nearby_stores">Find nearby stores</string>
+    <string name="store_locations">Store Locations</string>
 </resources>

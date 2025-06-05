@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,7 +12,6 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.mealmate.R;
 import com.example.mealmate.databinding.FragmentHomeBinding;
-import com.example.mealmate.ui.auth.AuthViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
@@ -21,33 +19,56 @@ import java.util.Calendar;
 /**
  * HomeFragment displays the main landing screen after user login.
  * Features a modern design with glassmorphism hero card, navigation grid,
- * dynamic greeting, and quick stats dashboard.
+ * dynamic greeting, and quick stats dashboard with fixed header.
  */
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-    private AuthViewModel authViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
-        authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
-
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         // Initialize the modern UI components
+        setupModernHeader();
         setupDynamicGreeting();
         setupNavigationCards();
-        setupQuickStats();
-        setupLogoutButton();
 
         return root;
     }
 
     /**
-     * Sets up dynamic greeting based on time of day
+     * Sets up the modern innovative header with profile and actions
+     */
+    private void setupModernHeader() {
+        // Search button click handler
+        binding.buttonSearch.setOnClickListener(v -> {
+            // TODO: Implement search functionality
+            // Could open a search dialog or navigate to search screen
+        });
+
+        // Notifications button click handler
+        binding.buttonNotifications.setOnClickListener(v -> {
+            // TODO: Implement notifications functionality
+            // Could show notification panel or navigate to notifications screen
+        });
+
+        // Profile avatar click handler
+        binding.imageProfile.setOnClickListener(v -> {
+            // TODO: Navigate to profile screen
+            // NavHostFragment.findNavController(HomeFragment.this)
+            // .navigate(R.id.navigation_profile);
+        });
+
+        // Optional: Show notification badge if there are notifications
+        // binding.notificationBadge.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Sets up dynamic greeting based on time of day in hero section
      */
     private void setupDynamicGreeting() {
         Calendar calendar = Calendar.getInstance();
@@ -70,21 +91,7 @@ public class HomeFragment extends Fragment {
             emoji = "🌙";
         }
 
-        binding.textWelcome.setText(greeting + "! " + emoji);
-
-        // Set dynamic subtitle based on time
-        String subtitle;
-        if (hourOfDay >= 5 && hourOfDay < 11) {
-            subtitle = "Ready to plan some delicious meals?";
-        } else if (hourOfDay >= 11 && hourOfDay < 14) {
-            subtitle = "Time to prep lunch or plan dinner!";
-        } else if (hourOfDay >= 14 && hourOfDay < 18) {
-            subtitle = "Perfect time for meal planning!";
-        } else {
-            subtitle = "Plan tomorrow's delicious meals!";
-        }
-
-        binding.textSubtitle.setText(subtitle);
+        binding.textHeroTitle.setText(greeting + "! " + emoji);
     }
 
     /**
@@ -112,50 +119,11 @@ public class HomeFragment extends Fragment {
             // .navigate(R.id.navigation_grocery_lists);
         });
 
-        // Settings Card
-        binding.cardSettings.setOnClickListener(v -> {
-            // TODO: Navigate to settings fragment
+        // Store Locations Card
+        binding.cardStoreLocations.setOnClickListener(v -> {
+            // TODO: Navigate to store locations fragment or open map
             // NavHostFragment.findNavController(HomeFragment.this)
-            // .navigate(R.id.navigation_settings);
-        });
-
-        // Floating Action Button for Quick Add Recipe
-        binding.fabQuickAdd.setOnClickListener(v -> {
-            // TODO: Navigate to add recipe fragment
-            // NavHostFragment.findNavController(HomeFragment.this)
-            // .navigate(R.id.navigation_add_recipe);
-        });
-    }
-
-    /**
-     * Sets up quick stats dashboard (placeholder values for now)
-     */
-    private void setupQuickStats() {
-        // TODO: These will be populated from actual data in future phases
-        binding.textRecipeCount.setText("0");
-        binding.textMealPlansCount.setText("0");
-        binding.textGroceryListsCount.setText("0");
-    }
-
-    /**
-     * Sets up logout button functionality
-     */
-    private void setupLogoutButton() {
-        binding.buttonLogout.setOnClickListener(v -> {
-            // Sign out from Firebase
-            FirebaseAuth.getInstance().signOut();
-
-            // Navigate back to login screen
-            NavHostFragment.findNavController(HomeFragment.this)
-                    .navigate(R.id.navigation_login);
-
-            // Clear the back stack to prevent returning to home screen
-            NavHostFragment.findNavController(HomeFragment.this)
-                    .popBackStack(R.id.mobile_navigation, true);
-
-            // Navigate to login again to ensure we're on the login screen
-            NavHostFragment.findNavController(HomeFragment.this)
-                    .navigate(R.id.navigation_login);
+            // .navigate(R.id.navigation_store_locations);
         });
     }
 

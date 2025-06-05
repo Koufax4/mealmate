@@ -49,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
                 if (getSupportActionBar() != null) {
                     getSupportActionBar().hide();
                 }
+            } else if (destination.getId() == R.id.navigation_home) {
+                // Hide ActionBar for home screen since we have custom header
+                navView.setVisibility(View.VISIBLE);
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().hide();
+                }
             } else {
                 navView.setVisibility(View.VISIBLE);
                 if (getSupportActionBar() != null) {
