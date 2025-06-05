@@ -254,7 +254,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Create & manage"
+                            android:text="@string/create_manage"
                             android:textSize="12sp"
                             android:textAlignment="center"
                             android:layout_marginTop="4dp"
@@ -424,7 +424,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Account & prefs"
+                            android:text="@string/account_prefs"
                             android:textSize="12sp"
                             android:textAlignment="center"
                             android:layout_marginTop="4dp"
