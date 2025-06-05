@@ -47,16 +47,17 @@
 
 ## Phase 2: Core App Structure & Home Screen (PRD: F1)
 
-- [ ] **Home Screen (`HomeFragment.java`):**
-  - [ ] Define layout `fragment_home.xml` for the main landing page after login.
-  - [ ] Potentially display quick links or summaries (e.g., "Create Recipe", "View Meal Plan", "View Grocery List"). This will evolve as other features are built.
-  - [ ] Ensure `BottomNavigationView` is visible and functional for Home, Dashboard, Notifications.
-- [ ] **Data Models (POJOs - as per `doc/architecture.md` & `doc/technical.md`):**
-  - [ ] Create `com.example.mealmate.data.model.User.java`.
-  - [ ] Create `com.example.mealmate.data.model.Recipe.java`.
-  - [ ] Create `com.example.mealmate.data.model.Ingredient.java`.
-  - [ ] Create `com.example.mealmate.data.model.GroceryItem.java`.
-  - [ ] Create `com.example.mealmate.data.model.MealPlan.java`.
+- [x] **Home Screen (`HomeFragment.java`):**
+  - [x] Define layout `fragment_home.xml` for the main landing page after login - *New modern UI implemented with dynamic greeting, hero card, navigation grid, and quick stats.*
+  - [x] Potentially display quick links or summaries (e.g., "Create Recipe", "View Meal Plan", "View Grocery List"). - *Implemented as navigation cards.*
+  - [x] Ensure `BottomNavigationView` is visible and functional for Home, Dashboard, Notifications.
+- [x] **Data Models (POJOs - as per `doc/architecture.md` & `doc/technical.md`):**
+  - [x] Create `com.example.mealmate.data.model.User.java`.
+  - [x] Create `com.example.mealmate.data.model.Recipe.java`.
+  - [x] Create `com.example.mealmate.data.model.Ingredient.java`.
+  - [x] Create `com.example.mealmate.data.model.GroceryItem.java`.
+  - [x] Create `com.example.mealmate.data.model.MealPlan.java`.
+  - [x] Create `com.example.mealmate.data.model.StoreLocation.java`.
 
 ## Phase 3: Recipe Management (PRD: F4, US4)
 
