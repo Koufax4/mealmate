@@ -23,7 +23,7 @@ com.example.mealmate/
 *   **Configuration File:** Add `google-services.json` to the `app/` directory.
 *   **SDK Integration:** Add Firebase BoM and necessary dependencies (Auth, Firestore, Storage) to `build.gradle` files.
 *   **Firebase Rules (Firestore - Initial Draft):**
-    ```json
+    ```
     rules_version = '2';
     service cloud.firestore {
       match /databases/{database}/documents {
@@ -40,7 +40,7 @@ com.example.mealmate/
     }
     ```
 *   **Firebase Rules (Storage - Initial Draft):**
-    ```json
+    ```
     rules_version = '2';
     service firebase.storage {
       match /b/{bucket}/o {
@@ -81,7 +81,7 @@ com.example.mealmate/
         *   Use `SmsManager.getDefault().sendTextMessage(phoneNumber, null, message, null, null);`
         *   Requires `android.permission.SEND_SMS`. Request at runtime.
     *   **Option 2 (Intent to SMS App - Recommended for better UX & no direct send permission):**
-        ```java
+        ```
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setData(Uri.parse("smsto:" + phoneNumber)); // This ensures only SMS apps respond
         intent.putExtra("sms_body", message);

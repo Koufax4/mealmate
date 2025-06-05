@@ -16,7 +16,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.mealmate.databinding.ActivityMainBinding;
-import com.example.mealmate.viewmodels.AuthViewModel;
+import com.example.mealmate.ui.auth.AuthViewModel;
 
 public class MainActivity extends AppCompatActivity {
 

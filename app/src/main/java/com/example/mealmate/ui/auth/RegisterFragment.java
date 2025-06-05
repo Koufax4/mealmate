@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.example.mealmate.R;
 import com.example.mealmate.databinding.FragmentRegisterBinding;
-import com.example.mealmate.viewmodels.AuthViewModel;
 import com.google.firebase.auth.FirebaseUser;
 
 public class RegisterFragment extends Fragment {

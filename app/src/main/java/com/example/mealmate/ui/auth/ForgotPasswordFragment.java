@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import com.example.mealmate.R;
 import com.example.mealmate.databinding.FragmentForgotPasswordBinding;
-import com.example.mealmate.viewmodels.AuthViewModel;
 
 public class ForgotPasswordFragment extends Fragment {
 

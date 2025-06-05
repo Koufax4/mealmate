@@ -1,4 +1,4 @@
-package com.example.mealmate.viewmodels;
+package com.example.mealmate.ui.auth;
 
 import android.app.Application;
 import androidx.annotation.NonNull;

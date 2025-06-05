@@ -5,17 +5,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button; // Import Button
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable; // Import Nullable
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment; // Import NavHostFragment
 
 import com.example.mealmate.R; // Import R
 import com.example.mealmate.databinding.FragmentHomeBinding;
-import com.example.mealmate.viewmodels.AuthViewModel; // Import AuthViewModel
+import com.example.mealmate.ui.auth.AuthViewModel; // Import AuthViewModel
 import com.google.firebase.auth.FirebaseAuth; // Import FirebaseAuth
 
 public class HomeFragment extends Fragment {

@@ -9,37 +9,41 @@
 
 ## Phase 1: Core Authentication (PRD: F2, US1, US2)
 
-- [ ] **Login Functionality:**
-  - [ ] Implement `LoginFragment.java` logic:
-    - [ ] Connect UI elements (EditTexts, Button, ProgressBar).
-    - [ ] Create `AuthViewModel.java` (extends `androidx.lifecycle.ViewModel`).
-    - [ ] Create `AuthRepository.java` to handle Firebase Auth calls.
-    - [ ] Implement email/password login using `FirebaseAuth.signInWithEmailAndPassword()`.
-    - [ ] Use `LiveData` in `AuthViewModel` to communicate login state (loading, success, error) to `LoginFragment`.
-    - [ ] Navigate to `navigation_home` on successful login.
-    - [ ] Display error messages (e.g., Toast, Snackbar) on failure.
-  - [ ] Handle "Forgot Password?" navigation/placeholder.
-- [ ] **Registration Functionality:**
-  - [ ] Create `RegisterFragment.java` and `fragment_register.xml`.
-    - [ ] UI for email, password, confirm password.
-  - [ ] Update `mobile_navigation.xml`:
-    - [ ] Change `navigation_register` to point to `com.example.mealmate.ui.auth.RegisterFragment`.
-    - [ ] Add action from `LoginFragment` to `navigation_register`.
-    - [ ] Add action from `RegisterFragment` back to `navigation_login` or to `navigation_home` upon successful registration.
-  - [ ] Implement `RegisterFragment.java` logic:
-    - [ ] Connect UI elements.
-    - [ ] Reuse or extend `AuthViewModel` and `AuthRepository`.
-    - [ ] Implement email/password registration using `FirebaseAuth.createUserWithEmailAndPassword()`.
-    - [ ] Store basic user profile info in Firestore (`/users/{userId}/profileInfo`) upon successful registration (e.g., email, creation date).
-    - [ ] Navigate appropriately after registration.
-- [ ] **Auth State Management:**
-  - [ ] In `MainActivity` or a `SplashFragment` (if created), check current `FirebaseAuth.getCurrentUser()`.
-    - [ ] If user is logged in, navigate to `navigation_home`.
-    - [ ] If not, navigate to `navigation_login`.
-  - [ ] Implement Logout functionality (e.g., in a settings menu or profile screen later).
-- [ ] **UI/UX Refinements for Auth:**
-  - [ ] Ensure `BottomNavigationView` in `MainActivity` is hidden during Login/Register flow.
-  - [ ] Add input validation for email and password fields.
+- [x] **Login Functionality:**
+  - [x] Implement `LoginFragment.java` logic:
+    - [x] Connect UI elements (EditTexts, Button, ProgressBar).
+    - [x] Create `AuthViewModel.java` (extends `androidx.lifecycle.ViewModel`).
+    - [x] Create `AuthRepository.java` to handle Firebase Auth calls.
+    - [x] Implement email/password login using `FirebaseAuth.signInWithEmailAndPassword()`.
+    - [x] Use `LiveData` in `AuthViewModel` to communicate login state (loading, success, error) to `LoginFragment`.
+    - [x] Navigate to `navigation_home` on successful login.
+    - [x] Display error messages (e.g., Toast, Snackbar) on failure.
+  - [x] Handle "Forgot Password?" navigation/placeholder.
+    - [x] Create `ForgotPasswordFragment.java` and `fragment_forgot_password.xml`.
+    - [x] Implement logic for sending password reset email.
+- [x] **Registration Functionality:**
+  - [x] Create `RegisterFragment.java` and `fragment_register.xml`.
+    - [x] UI for email, password, confirm password.
+  - [x] Update `mobile_navigation.xml`:
+    - [x] Change `navigation_register` to point to `com.example.mealmate.ui.auth.RegisterFragment`.
+    - [x] Add action from `LoginFragment` to `navigation_register`.
+    - [x] Add action from `RegisterFragment` back to `navigation_login` or to `navigation_home` upon successful registration.
+  - [x] Implement `RegisterFragment.java` logic:
+    - [x] Connect UI elements.
+    - [x] Reuse `AuthViewModel` and `AuthRepository`.
+    - [x] Implement email/password registration using `FirebaseAuth.createUserWithEmailAndPassword()`.
+    - [x] Store basic user profile info in Firestore (`/users/{userId}/profileInfo/details`) upon successful registration (e.g., email, creation date).
+    - [x] Navigate appropriately after registration.
+    - [x] Delete Firebase Auth user if Firestore profile creation fails.
+- [x] **Auth State Management:**
+  - [x] In `MainActivity`, check current `FirebaseAuth.getCurrentUser()` on start.
+    - [x] If user is logged in, navigate to `navigation_home`.
+    - [x] If not, navigate to `navigation_login` (handled by startDestination).
+  - [x] Implement Logout functionality (basic version in `HomeFragment`).
+- [x] **UI/UX Refinements for Auth:**
+  - [x] Ensure `BottomNavigationView` in `MainActivity` is hidden during Login/Register/Forgot Password flow.
+  - [x] Add input validation for email and password fields.
+  - [x] Applied custom rounded purple border style to `TextInputLayout` elements in auth screens.
 
 ## Phase 2: Core App Structure & Home Screen (PRD: F1)
 
