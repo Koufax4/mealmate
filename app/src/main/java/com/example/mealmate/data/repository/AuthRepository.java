@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.annotation.Nullable;
 
 import com.example.mealmate.data.model.AuthResource;
+import com.example.mealmate.data.model.User;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -63,19 +65,24 @@ public class AuthRepository {
 
     private void createUserProfileDocument(FirebaseUser firebaseUser, MutableLiveData<AuthResource<FirebaseUser>> liveData) {
         String userId = firebaseUser.getUid();
-        Map<String, Object> userProfile = new HashMap<>();
-        userProfile.put("email", firebaseUser.getEmail());
-        userProfile.put("createdAt", com.google.firebase.firestore.FieldValue.serverTimestamp());
+        // Use the User data model for consistency
+        User newUser = new User(
+                userId,
+                firebaseUser.getEmail(),
+                null, // displayName can be added later
+                null, // photoUrl can be added later
+                Timestamp.now() // Use client-side timestamp for simplicity here
+        );
 
         firestore.collection("users").document(userId)
-                .collection("profileInfo").document("details")
-                .set(userProfile)
+                .set(newUser) // Use the User object directly
                 .addOnCompleteListener(profileTask -> {
                     if (profileTask.isSuccessful()) {
                         Log.d(TAG, "User profile created for: " + userId);
                         liveData.setValue(AuthResource.success(firebaseUser));
                     } else {
                         Log.e(TAG, "Failed to create user profile: ", profileTask.getException());
+                        // Rollback auth creation if profile creation fails
                         firebaseUser.delete().addOnCompleteListener(deleteTask -> {
                             if (deleteTask.isSuccessful()) {
                                 Log.d(TAG, "Firebase Auth user deleted due to profile creation failure.");

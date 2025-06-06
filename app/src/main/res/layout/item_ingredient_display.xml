@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:gravity="center_vertical">
+
+    <!-- Bullet Point -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="•"
+        android:textSize="16sp"
+        android:textColor="@color/purple_700"
+        android:layout_marginEnd="8dp" />
+
+    <!-- Ingredient Text -->
+    <TextView
+        android:id="@+id/textViewIngredient"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="2 cups flour"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        tools:text="2 cups all-purpose flour" />
+
+</LinearLayout> 

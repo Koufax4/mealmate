@@ -61,21 +61,23 @@
 
 ## Phase 3: Recipe Management (PRD: F4, US4)
 
-- [ ] **Recipe Creation (`AddRecipeFragment`):**
-  - [ ] Create `AddRecipeFragment.java` and `fragment_add_recipe.xml`.
-  - [ ] UI for recipe name, ingredients (dynamic list), instructions, image upload.
-  - [ ] Implement `RecipeRepository.java` for Firestore operations related to recipes.
-  - [ ] Implement `RecipeViewModel.java` to manage recipe data and interactions.
-  - [ ] Logic for adding/removing ingredients dynamically in `AddRecipeFragment` (e.g., using a RecyclerView).
-  - [ ] Image picking from gallery (`ActivityResultLauncher`).
-  - [ ] Upload image to Firebase Storage (e.g., `/recipe_images/{userId}/{recipeId_or_imageId}`).
-  - [ ] Save recipe data (name, ingredients list, instructions, imageURL) to Firestore under `/users/{userId}/recipes/{recipeId}`.
-- [ ] **View Recipes:**
-  - [ ] Create `RecipeListFragment.java` and `fragment_recipe_list.xml`.
-    - [ ] Use `RecyclerView` with `RecipeAdapter.java` to display user's recipes fetched from Firestore.
-  - [ ] Create `RecipeDetailFragment.java` and `fragment_recipe_detail.xml`.
-    - [ ] Display full details of a selected recipe.
-  - [ ] Add navigation to these fragments.
+- [x] **Recipe Creation (`AddRecipeFragment`):**
+  - [x] Create `AddRecipeFragment.java` and `fragment_add_recipe.xml`.
+  - [x] UI for recipe name, ingredients (dynamic list), instructions, image upload.
+  - [x] Implement `RecipeRepository.java` for Firestore operations related to recipes.
+  - [x] Implement `RecipeViewModel.java` to manage recipe data and interactions.
+  - [x] Logic for adding/removing ingredients dynamically in `AddRecipeFragment` (using a RecyclerView).
+  - [x] Image picking from gallery (`ActivityResultLauncher`).
+  - [x] Upload image to Firebase Storage (e.g., `/recipe_images/{userId}/{recipeId_or_imageId}`).
+  - [x] Save recipe data (name, ingredients list, instructions, imageURL) to Firestore under `/users/{userId}/recipes/{recipeId}`.
+- [x] **View Recipes:**
+  - [x] Create `RecipeListFragment.java` and `fragment_recipe_list.xml`.
+    - [x] Use `RecyclerView` with `RecipeAdapter.java` to display user's recipes fetched from Firestore.
+  - [x] Create `RecipeDetailFragment.java` and `fragment_recipe_detail.xml`.
+    - [x] Display full details of a selected recipe.
+  - [x] Add navigation to these fragments.
+- [x] **Delete Recipes:**
+  - [x] Implement recipe deletion from `RecipeListFragment`.
 
 ## Phase 4: Meal Planning (PRD: US5)
 

@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private NavController navController;
     private AuthViewModel authViewModel;
+    // This is no longer needed
+    // private AppBarConfiguration appBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,32 +36,20 @@ public class MainActivity extends AppCompatActivity {
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
-                .build();
+        // We no longer need AppBarConfiguration
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        // This line would crash the app, as there is no ActionBar
+        // NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
+        // Simplified listener to only manage the bottom nav visibility
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.navigation_login ||
                     destination.getId() == R.id.navigation_register ||
                     destination.getId() == R.id.navigation_forgot_password) {
                 navView.setVisibility(View.GONE);
-                if (getSupportActionBar() != null) {
-                    getSupportActionBar().hide();
-                }
-            } else if (destination.getId() == R.id.navigation_home) {
-                // Hide ActionBar for home screen since we have custom header
-                navView.setVisibility(View.VISIBLE);
-                if (getSupportActionBar() != null) {
-                    getSupportActionBar().hide();
-                }
             } else {
                 navView.setVisibility(View.VISIBLE);
-                if (getSupportActionBar() != null) {
-                    getSupportActionBar().show();
-                }
             }
         });
     }

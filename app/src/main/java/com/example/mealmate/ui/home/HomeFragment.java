@@ -100,9 +100,8 @@ public class HomeFragment extends Fragment {
     private void setupNavigationCards() {
         // My Recipes Card
         binding.cardMyRecipes.setOnClickListener(v -> {
-            // TODO: Navigate to recipes list fragment
-            // NavHostFragment.findNavController(HomeFragment.this)
-            // .navigate(R.id.navigation_recipes);
+            NavHostFragment.findNavController(HomeFragment.this)
+                    .navigate(R.id.action_navigation_home_to_recipeListFragment);
         });
 
         // Meal Planner Card
