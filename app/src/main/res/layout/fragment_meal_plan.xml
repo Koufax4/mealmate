@@ -1,0 +1,714 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_100"
+    tools:context=".ui.mealplan.MealPlanFragment">
+
+    <!-- App Bar with Week Navigation -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:elevation="4dp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            app:title="Meal Planner"
+            app:titleTextColor="@color/purple_900"
+            app:navigationIcon="@drawable/ic_arrow_back_24"
+            app:navigationIconTint="@color/purple_900" />
+
+        <!-- Week Navigation Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:background="@color/white">
+
+            <!-- Previous Week Button -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/buttonPreviousWeek"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/purple_100"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_arrow_left_24"
+                    app:tint="@color/purple_700"
+                    android:layout_gravity="center"
+                    android:contentDescription="Previous Week" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Week Display -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginHorizontal="16dp">
+
+                <TextView
+                    android:id="@+id/textWeekRange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12/04 - 12/10"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/purple_900"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="This Week"
+                    android:textSize="12sp"
+                    android:textColor="@color/gray_600"
+                    android:layout_marginTop="2dp" />
+
+            </LinearLayout>
+
+            <!-- Next Week Button -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/buttonNextWeek"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/purple_100"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_arrow_right_24"
+                    app:tint="@color/purple_700"
+                    android:layout_gravity="center"
+                    android:contentDescription="Next Week" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Main Content -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Days of the Week -->
+            <LinearLayout
+                android:id="@+id/layoutDays"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Monday -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Monday"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/purple_900"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_marginBottom="12dp" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutMondayMeals"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <!-- Add Recipe Button for Monday -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/buttonAddMondayMeal"
+                                android:layout_width="match_parent"
+                                android:layout_height="60dp"
+                                android:layout_marginBottom="8dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:strokeWidth="1dp"
+                                app:strokeColor="@color/gray_300"
+                                app:cardBackgroundColor="@color/gray_100"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="?attr/selectableItemBackground">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical"
+                                    android:padding="16dp">
+
+                                    <ImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/ic_add_24"
+                                        app:tint="@color/gray_600"
+                                        android:layout_marginEnd="12dp"
+                                        android:contentDescription="Add Recipe" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Add Recipe"
+                                        android:textSize="14sp"
+                                        android:textColor="@color/gray_600" />
+
+                                </LinearLayout>
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Tuesday -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tuesday"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/purple_900"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_marginBottom="12dp" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutTuesdayMeals"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/buttonAddTuesdayMeal"
+                                android:layout_width="match_parent"
+                                android:layout_height="60dp"
+                                android:layout_marginBottom="8dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:strokeWidth="1dp"
+                                app:strokeColor="@color/gray_300"
+                                app:cardBackgroundColor="@color/gray_100"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="?attr/selectableItemBackground">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical"
+                                    android:padding="16dp">
+
+                                    <ImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/ic_add_24"
+                                        app:tint="@color/gray_600"
+                                        android:layout_marginEnd="12dp"
+                                        android:contentDescription="Add Recipe" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Add Recipe"
+                                        android:textSize="14sp"
+                                        android:textColor="@color/gray_600" />
+
+                                </LinearLayout>
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Wednesday -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Wednesday"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/purple_900"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_marginBottom="12dp" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutWednesdayMeals"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/buttonAddWednesdayMeal"
+                                android:layout_width="match_parent"
+                                android:layout_height="60dp"
+                                android:layout_marginBottom="8dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:strokeWidth="1dp"
+                                app:strokeColor="@color/gray_300"
+                                app:cardBackgroundColor="@color/gray_100"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="?attr/selectableItemBackground">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical"
+                                    android:padding="16dp">
+
+                                    <ImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/ic_add_24"
+                                        app:tint="@color/gray_600"
+                                        android:layout_marginEnd="12dp"
+                                        android:contentDescription="Add Recipe" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Add Recipe"
+                                        android:textSize="14sp"
+                                        android:textColor="@color/gray_600" />
+
+                                </LinearLayout>
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Thursday -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Thursday"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/purple_900"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_marginBottom="12dp" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutThursdayMeals"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/buttonAddThursdayMeal"
+                                android:layout_width="match_parent"
+                                android:layout_height="60dp"
+                                android:layout_marginBottom="8dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:strokeWidth="1dp"
+                                app:strokeColor="@color/gray_300"
+                                app:cardBackgroundColor="@color/gray_100"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="?attr/selectableItemBackground">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical"
+                                    android:padding="16dp">
+
+                                    <ImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/ic_add_24"
+                                        app:tint="@color/gray_600"
+                                        android:layout_marginEnd="12dp"
+                                        android:contentDescription="Add Recipe" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Add Recipe"
+                                        android:textSize="14sp"
+                                        android:textColor="@color/gray_600" />
+
+                                </LinearLayout>
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Friday -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Friday"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/purple_900"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_marginBottom="12dp" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutFridayMeals"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/buttonAddFridayMeal"
+                                android:layout_width="match_parent"
+                                android:layout_height="60dp"
+                                android:layout_marginBottom="8dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:strokeWidth="1dp"
+                                app:strokeColor="@color/gray_300"
+                                app:cardBackgroundColor="@color/gray_100"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="?attr/selectableItemBackground">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical"
+                                    android:padding="16dp">
+
+                                    <ImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/ic_add_24"
+                                        app:tint="@color/gray_600"
+                                        android:layout_marginEnd="12dp"
+                                        android:contentDescription="Add Recipe" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Add Recipe"
+                                        android:textSize="14sp"
+                                        android:textColor="@color/gray_600" />
+
+                                </LinearLayout>
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Saturday -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Saturday"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/purple_900"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_marginBottom="12dp" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutSaturdayMeals"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/buttonAddSaturdayMeal"
+                                android:layout_width="match_parent"
+                                android:layout_height="60dp"
+                                android:layout_marginBottom="8dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:strokeWidth="1dp"
+                                app:strokeColor="@color/gray_300"
+                                app:cardBackgroundColor="@color/gray_100"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="?attr/selectableItemBackground">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical"
+                                    android:padding="16dp">
+
+                                    <ImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/ic_add_24"
+                                        app:tint="@color/gray_600"
+                                        android:layout_marginEnd="12dp"
+                                        android:contentDescription="Add Recipe" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Add Recipe"
+                                        android:textSize="14sp"
+                                        android:textColor="@color/gray_600" />
+
+                                </LinearLayout>
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Sunday -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sunday"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/purple_900"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_marginBottom="12dp" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutSundayMeals"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/buttonAddSundayMeal"
+                                android:layout_width="match_parent"
+                                android:layout_height="60dp"
+                                android:layout_marginBottom="8dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:strokeWidth="1dp"
+                                app:strokeColor="@color/gray_300"
+                                app:cardBackgroundColor="@color/gray_100"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="?attr/selectableItemBackground">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical"
+                                    android:padding="16dp">
+
+                                    <ImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/ic_add_24"
+                                        app:tint="@color/gray_600"
+                                        android:layout_marginEnd="12dp"
+                                        android:contentDescription="Add Recipe" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Add Recipe"
+                                        android:textSize="14sp"
+                                        android:textColor="@color/gray_600" />
+
+                                </LinearLayout>
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Floating Action Buttons -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:orientation="vertical"
+        android:gravity="end">
+
+        <!-- Generate Grocery List Button -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabGenerateGroceryList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_shopping_cart_24"
+            app:tint="@color/white"
+            app:backgroundTint="@color/purple_700"
+            app:fabSize="normal"
+            android:contentDescription="Generate Grocery List" />
+
+        <!-- Save Meal Plan Button -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabSaveMealPlan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_save_24"
+            app:tint="@color/white"
+            app:backgroundTint="@color/purple_500"
+            app:fabSize="normal"
+            android:contentDescription="Save Meal Plan" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout> 

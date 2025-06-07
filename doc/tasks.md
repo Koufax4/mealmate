@@ -48,8 +48,8 @@
 ## Phase 2: Core App Structure & Home Screen (PRD: F1)
 
 - [x] **Home Screen (`HomeFragment.java`):**
-  - [x] Define layout `fragment_home.xml` for the main landing page after login - *New modern UI implemented with dynamic greeting, hero card, navigation grid, and quick stats.*
-  - [x] Potentially display quick links or summaries (e.g., "Create Recipe", "View Meal Plan", "View Grocery List"). - *Implemented as navigation cards.*
+  - [x] Define layout `fragment_home.xml` for the main landing page after login - _New modern UI implemented with dynamic greeting, hero card, navigation grid, and quick stats._
+  - [x] Potentially display quick links or summaries (e.g., "Create Recipe", "View Meal Plan", "View Grocery List"). - _Implemented as navigation cards._
   - [x] Ensure `BottomNavigationView` is visible and functional for Home, Dashboard, Notifications.
 - [x] **Data Models (POJOs - as per `doc/architecture.md` & `doc/technical.md`):**
   - [x] Create `com.example.mealmate.data.model.User.java`.
@@ -81,25 +81,25 @@
 
 ## Phase 4: Meal Planning (PRD: US5)
 
-- [ ] **Meal Plan Creation/Viewing:**
-  - [ ] Create `MealPlanFragment.java` and `fragment_meal_plan.xml`.
-  - [ ] Implement UI to create/view a weekly meal plan (e.g., assign recipes to days).
-  - [ ] Implement `MealPlanRepository.java` and `MealPlanViewModel.java`.
-  - [ ] Store meal plan data in Firestore (e.g., `/users/{userId}/mealPlans/{planId}`).
+- [x] **Meal Plan Creation/Viewing:**
+  - [x] Create `MealPlanFragment.java` and `fragment_meal_plan.xml`.
+  - [x] Implement UI to create/view a weekly meal plan (e.g., assign recipes to days).
+  - [x] Implement `MealPlanRepository.java` and `MealPlanViewModel.java`.
+  - [x] Store meal plan data in Firestore (e.g., `/users/{userId}/mealPlans/{planId}`).
 
 ## Phase 5: Grocery List Management (PRD: F3, US6, US7, US8, US9)
 
-- [ ] **Grocery List Generation & Display:**
-  - [ ] Create `GroceryListFragment.java` and `fragment_grocery_list.xml`.
-  - [ ] Implement `GroceryRepository.java` and `GroceryViewModel.java`.
-  - [ ] Logic to generate a consolidated grocery list from a selected `MealPlan`.
-    - [ ] Aggregate ingredients, handle quantities.
-  - [ ] Display grocery list using `RecyclerView` with `GroceryItemAdapter.java`.
-  - [ ] Store grocery list in Firestore (e.g., `/users/{userId}/groceryLists/{listId}`).
-- [ ] **Manage Grocery Items (PRD: F3):**
-  - [ ] **F3.1 Delete Items:** Implement item deletion (e.g., swipe-to-delete or button).
+- [x] **Grocery List Generation & Display:**
+  - [x] Create `GroceryListFragment.java` and `fragment_grocery_list.xml`.
+  - [x] Implement `GroceryRepository.java` and `GroceryViewModel.java`.
+  - [x] Logic to generate a consolidated grocery list from a selected `MealPlan`.
+    - [x] Aggregate ingredients, handle quantities.
+  - [x] Display grocery list using `RecyclerView` with `GroceryItemAdapter.java`.
+  - [x] Store grocery list in Firestore (e.g., `/users/{userId}/groceryLists/{listId}`).
+- [x] **Manage Grocery Items (PRD: F3):**
+  - [x] **F3.1 Delete Items:** Implement item deletion (e.g., swipe-to-delete or button).
   - [ ] **F3.2 Edit Items:** Implement item editing (e.g., name, quantity, notes via DialogFragment).
-  - [ ] **F3.3 Mark Items as Purchased:** Implement checkbox or toggle for purchase status. Update Firestore accordingly.
+  - [x] **F3.3 Mark Items as Purchased:** Implement checkbox or toggle for purchase status. Update Firestore accordingly.
 
 ## Phase 6: Item Delegation (SMS) (PRD: F5, US10)
 

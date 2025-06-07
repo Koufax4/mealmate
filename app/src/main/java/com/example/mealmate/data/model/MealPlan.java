@@ -1,6 +1,7 @@
 package com.example.mealmate.data.model;
 
 import com.google.firebase.Timestamp;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * application.
  * This POJO is designed to work with Firebase Firestore for data persistence.
  */
-public class MealPlan {
+public class MealPlan implements Serializable {
     private String planId;
     private String userId;
     private String name;

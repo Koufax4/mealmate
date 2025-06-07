@@ -106,9 +106,8 @@ public class HomeFragment extends Fragment {
 
         // Meal Planner Card
         binding.cardMealPlanner.setOnClickListener(v -> {
-            // TODO: Navigate to meal planner fragment
-            // NavHostFragment.findNavController(HomeFragment.this)
-            // .navigate(R.id.navigation_meal_planner);
+            NavHostFragment.findNavController(HomeFragment.this)
+                    .navigate(R.id.action_navigation_home_to_mealPlanFragment);
         });
 
         // Grocery Lists Card
