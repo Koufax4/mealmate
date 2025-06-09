@@ -45,6 +45,13 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
         notifyDataSetChanged();
     }
 
+    /**
+     * Gets the current list of grocery items.
+     */
+    public List<GroceryItem> getCurrentItems() {
+        return groceryItems;
+    }
+
     @NonNull
     @Override
     public GroceryItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -56,7 +56,7 @@ public class GroceryListFragment extends Fragment implements GroceryItemAdapter.
     }
 
     private void setupClickListeners() {
-        binding.toolbar.setNavigationOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
+        binding.buttonBack.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
     }
 
     private void observeViewModel() {
@@ -83,6 +83,25 @@ public class GroceryListFragment extends Fragment implements GroceryItemAdapter.
             }
         });
 
+        // Observe update item result
+        groceryViewModel.getUpdateItemResult().observe(getViewLifecycleOwner(), resource -> {
+            if (resource != null) {
+                switch (resource.status) {
+                    case SUCCESS:
+                        groceryViewModel.clearUpdateItemResult();
+                        // Don't refresh the entire list for individual updates -
+                        // the summary is already updated immediately in onPurchasedToggle
+                        break;
+                    case ERROR:
+                        showError("Failed to update item: " + resource.message);
+                        groceryViewModel.clearUpdateItemResult();
+                        // On error, refresh to revert any local changes
+                        groceryViewModel.loadGroceryList();
+                        break;
+                }
+            }
+        });
+
         // Observe delete item result
         groceryViewModel.getDeleteItemResult().observe(getViewLifecycleOwner(), resource -> {
             if (resource != null) {
@@ -100,9 +119,6 @@ public class GroceryListFragment extends Fragment implements GroceryItemAdapter.
                 }
             }
         });
-
-        // Other observers for updateItemResult, generateListResult can be added if
-        // specific UI feedback is needed
     }
 
     private void showLoading() {
@@ -148,7 +164,11 @@ public class GroceryListFragment extends Fragment implements GroceryItemAdapter.
 
     @Override
     public void onPurchasedToggle(GroceryItem item, boolean purchased) {
+        // Update the item in the backend
         groceryViewModel.updateItem(item);
+
+        // Immediately update the summary to provide instant feedback
+        updateSummary(adapter.getCurrentItems());
     }
 
     @Override

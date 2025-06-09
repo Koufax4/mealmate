@@ -92,14 +92,31 @@
 - [x] **Grocery List Generation & Display:**
   - [x] Create `GroceryListFragment.java` and `fragment_grocery_list.xml`.
   - [x] Implement `GroceryRepository.java` and `GroceryViewModel.java`.
-  - [x] Logic to generate a consolidated grocery list from a selected `MealPlan`.
-    - [x] Aggregate ingredients, handle quantities.
+  - [x] **REFACTORED:** Changed from meal plan-based temporary lists to persistent accumulative grocery list approach.
+    - [x] Persistent grocery list with ID "main_list" that accumulates ingredients from multiple recipes.
+    - [x] Smart ingredient consolidation logic that combines duplicates and sums compatible quantities.
+    - [x] Removed meal plan dependencies from `GroceryViewModel.java`.
   - [x] Display grocery list using `RecyclerView` with `GroceryItemAdapter.java`.
-  - [x] Store grocery list in Firestore (e.g., `/users/{userId}/groceryLists/{listId}`).
+  - [x] Store grocery list in Firestore (e.g., `/users/{userId}/groceryLists/main_list`).
+- [x] **Recipe Detail Integration:**
+  - [x] Added FloatingActionButton to `RecipeDetailFragment` for "Add to Grocery List" functionality.
+  - [x] Integrated `GroceryViewModel` into `RecipeDetailFragment` for ingredient addition.
+  - [x] Implemented automatic ingredient consolidation when adding from recipes.
+  - [x] Added user feedback via Snackbar for successful/failed operations.
+- [x] **Navigation Updates:**
+  - [x] Removed meal plan to grocery list navigation action.
+  - [x] Added direct navigation from Home to Grocery List.
+  - [x] Updated meal plan fragment to remove grocery list generation FAB.
+  - [x] Made recipe cards in meal plan clickable for navigation to recipe details.
 - [x] **Manage Grocery Items (PRD: F3):**
   - [x] **F3.1 Delete Items:** Implement item deletion (e.g., swipe-to-delete or button).
   - [ ] **F3.2 Edit Items:** Implement item editing (e.g., name, quantity, notes via DialogFragment).
   - [x] **F3.3 Mark Items as Purchased:** Implement checkbox or toggle for purchase status. Update Firestore accordingly.
+  - [x] **F3.4 Immediate UI Updates:** Fixed count updates to refresh immediately when items are checked/unchecked.
+- [x] **UI Consistency:**
+  - [x] Applied consistent custom action bar styling across fragments matching the purple theme.
+  - [x] Replaced AppBarLayout with custom RelativeLayout headers for consistent design.
+  - [x] Updated click handlers from toolbar to buttonBack navigation.
 
 ## Phase 6: Item Delegation (SMS) (PRD: F5, US10)
 
