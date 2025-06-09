@@ -1,3 +1,4 @@
+// app/src/main/java/com/example/mealmate/ui/grocery/GroceryViewModel.java
 package com.example.mealmate.ui.grocery;
 
 import android.util.Log;
@@ -11,8 +12,8 @@ import com.example.mealmate.data.model.AuthResource;
 import com.example.mealmate.data.model.GroceryItem;
 import com.example.mealmate.data.model.Ingredient;
 import com.example.mealmate.data.repository.GroceryRepository;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,105 +80,76 @@ public class GroceryViewModel extends ViewModel {
 
     /**
      * Adds ingredients from a recipe to the main grocery list.
-     * This method consolidates duplicate ingredients and saves the updated list.
+     * This method fetches the current list, consolidates new ingredients, and saves
+     * the updated list.
      */
     public void addIngredientsToGroceryList(List<Ingredient> ingredients) {
         if (ingredients == null || ingredients.isEmpty()) {
-            addIngredientsResult.setValue(AuthResource.success(null));
+            addIngredientsResult.setValue(AuthResource.error("No ingredients to add", null));
             return;
         }
 
         addIngredientsResult.setValue(AuthResource.loading(null));
 
-        // First, get the current grocery list
+        // Create a temporary LiveData to get the current list just once.
         MutableLiveData<AuthResource<List<GroceryItem>>> currentListLiveData = new MutableLiveData<>();
         groceryRepository.getGroceryList(MAIN_GROCERY_LIST_ID, currentListLiveData);
 
         currentListLiveData.observeForever(resource -> {
-            if (resource.status == AuthResource.Status.SUCCESS) {
-                List<GroceryItem> currentItems = resource.data != null ? resource.data : new ArrayList<>();
+            if (resource != null) {
+                // We only want to process this once, so remove the observer immediately.
+                currentListLiveData.removeObserver(resource1 -> {
+                });
 
-                // Create a map for easy consolidation
-                Map<String, GroceryItem> consolidatedItems = new HashMap<>();
-
-                // Add existing items to the map
-                for (GroceryItem item : currentItems) {
-                    consolidatedItems.put(item.getName().toLowerCase().trim(), item);
+                if (resource.status == AuthResource.Status.SUCCESS) {
+                    List<GroceryItem> currentItems = resource.data != null ? resource.data : new ArrayList<>();
+                    processAndSaveGroceryList(currentItems, ingredients);
+                } else if (resource.status == AuthResource.Status.ERROR) {
+                    // Handle case where the initial list fetch fails
+                    addIngredientsResult.setValue(AuthResource.error(resource.message, null));
                 }
-
-                // Add new ingredients, consolidating duplicates
-                for (Ingredient ingredient : ingredients) {
-                    addIngredientToConsolidatedList(ingredient, consolidatedItems);
-                }
-
-                // Save the updated list
-                List<GroceryItem> finalList = new ArrayList<>(consolidatedItems.values());
-                groceryRepository.saveGroceryList(MAIN_GROCERY_LIST_ID, finalList, addIngredientsResult);
-
-                // Update the main grocery list LiveData
-                groceryListLiveData.setValue(AuthResource.success(finalList));
-
-            } else if (resource.status == AuthResource.Status.ERROR) {
-                addIngredientsResult.setValue(AuthResource.error(resource.message, null));
             }
         });
     }
 
-    /**
-     * Adds an ingredient to the consolidated grocery list, combining quantities if
-     * the same item exists.
-     */
-    private void addIngredientToConsolidatedList(Ingredient ingredient, Map<String, GroceryItem> consolidatedItems) {
-        if (ingredient.getName() == null || ingredient.getName().trim().isEmpty()) {
-            return;
+    private void processAndSaveGroceryList(List<GroceryItem> currentItems, List<Ingredient> newIngredients) {
+        // Use a map for efficient consolidation based on a normalized key.
+        Map<String, GroceryItem> consolidatedItems = new HashMap<>();
+        for (GroceryItem item : currentItems) {
+            String key = (item.getName().toLowerCase().trim() + "|"
+                    + (item.getUnit() != null ? item.getUnit().toLowerCase().trim() : ""));
+            consolidatedItems.put(key, item);
         }
 
-        String normalizedName = ingredient.getName().toLowerCase().trim();
+        for (Ingredient ingredient : newIngredients) {
+            if (ingredient.getName() == null || ingredient.getName().trim().isEmpty())
+                continue;
 
-        if (consolidatedItems.containsKey(normalizedName)) {
-            // Item already exists, update quantity and combine units if different
-            GroceryItem existingItem = consolidatedItems.get(normalizedName);
+            String key = (ingredient.getName().toLowerCase().trim() + "|"
+                    + (ingredient.getUnit() != null ? ingredient.getUnit().toLowerCase().trim() : ""));
 
-            try {
-                double existingQuantity = existingItem.getQuantity();
-                double newQuantity = Double.parseDouble(ingredient.getQuantity());
-
-                // If units are the same or one is empty, just add quantities
-                if (existingItem.getUnit().equals(ingredient.getUnit()) ||
-                        existingItem.getUnit().isEmpty() || ingredient.getUnit().isEmpty()) {
-
-                    existingItem.setQuantity(existingQuantity + newQuantity);
-                    if (existingItem.getUnit().isEmpty() && !ingredient.getUnit().isEmpty()) {
-                        existingItem.setUnit(ingredient.getUnit());
-                    }
-                } else {
-                    // Different units, add to notes field
-                    String currentNotes = existingItem.getNotes() != null ? existingItem.getNotes() : "";
-                    String additionalNote = " + " + ingredient.getQuantity() + " " + ingredient.getUnit();
-                    existingItem.setNotes(currentNotes + additionalNote);
+            if (consolidatedItems.containsKey(key)) {
+                // Item exists, just add the quantity.
+                GroceryItem existingItem = consolidatedItems.get(key);
+                if (existingItem != null) {
+                    existingItem.setQuantity(existingItem.getQuantity() + ingredient.getQuantity());
                 }
-            } catch (NumberFormatException e) {
-                // If new quantity isn't parseable as number, add to notes
-                String currentNotes = existingItem.getNotes() != null ? existingItem.getNotes() : "";
-                String additionalNote = " + " + ingredient.getQuantity() + " " + ingredient.getUnit();
-                existingItem.setNotes(currentNotes + additionalNote);
+            } else {
+                // New item, add to map.
+                GroceryItem newItem = new GroceryItem();
+                newItem.setItemId(UUID.randomUUID().toString());
+                newItem.setName(ingredient.getName());
+                newItem.setQuantity(ingredient.getQuantity());
+                newItem.setUnit(ingredient.getUnit());
+                newItem.setPurchased(false);
+                newItem.setCategory(categorizeIngredient(ingredient.getName()));
+                consolidatedItems.put(key, newItem);
             }
-        } else {
-            // New item, create GroceryItem
-            GroceryItem newItem = new GroceryItem();
-            newItem.setItemId(UUID.randomUUID().toString());
-            newItem.setName(ingredient.getName());
-            try {
-                newItem.setQuantity(Double.parseDouble(ingredient.getQuantity()));
-            } catch (NumberFormatException e) {
-                newItem.setQuantity(1.0); // Default to 1 if quantity is not a number
-            }
-            newItem.setUnit(ingredient.getUnit());
-            newItem.setPurchased(false);
-            newItem.setCategory(categorizeIngredient(ingredient.getName()));
-
-            consolidatedItems.put(normalizedName, newItem);
         }
+
+        // Save the updated list back to Firestore.
+        groceryRepository.saveGroceryList(MAIN_GROCERY_LIST_ID, new ArrayList<>(consolidatedItems.values()),
+                addIngredientsResult);
     }
 
     /**

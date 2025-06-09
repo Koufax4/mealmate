@@ -1,3 +1,4 @@
+// app/src/main/java/com/example/mealmate/ui/mealplan/MealPlanFragment.java
 package com.example.mealmate.ui.mealplan;
 
 import android.os.Bundle;
@@ -104,6 +105,11 @@ public class MealPlanFragment extends Fragment {
 
         // Save meal plan
         binding.fabSaveMealPlan.setOnClickListener(v -> mealPlanViewModel.saveMealPlan());
+
+        // The "Generate Grocery List" button was removed from the layout in this
+        // refactor
+        // binding.fabGenerateGroceryList.setOnClickListener(v ->
+        // generateGroceryList());
 
         // Add recipe buttons for each day
         for (Map.Entry<String, MaterialCardView> entry : addButtons.entrySet()) {
@@ -254,9 +260,6 @@ public class MealPlanFragment extends Fragment {
             NavHostFragment.findNavController(this)
                     .navigate(R.id.action_mealPlanFragment_to_recipeDetailFragment, args);
         });
-        // The following line caused the crash and is not needed for the ripple effect.
-        // recipeCard.setForeground(getResources().getDrawable(android.R.attr.selectableItemBackground,
-        // null));
 
         // Create content layout
         LinearLayout contentLayout = new LinearLayout(requireContext());
