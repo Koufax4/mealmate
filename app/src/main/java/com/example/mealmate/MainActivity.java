@@ -1,11 +1,12 @@
 package com.example.mealmate;
 
+import android.animation.LayoutTransition;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,15 +22,17 @@ import androidx.navigation.Navigation;
 import com.example.mealmate.databinding.ActivityMainBinding;
 import com.example.mealmate.ui.auth.AuthViewModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private NavController navController;
     private AuthViewModel authViewModel;
 
-    // Navigation items
-    private LinearLayout navHome, navRecipe, navMealPlan, navGrocery, navMap;
     private MaterialCardView navContainer;
+    private final List<LinearLayout> navItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,117 +42,90 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-
-        // Initialize navigation controller
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
 
-        // Setup custom navigation
         setupCustomNavigation();
 
-        // Manage navigation visibility
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.navigation_login ||
-                    destination.getId() == R.id.navigation_register ||
-                    destination.getId() == R.id.navigation_forgot_password) {
-                navContainer.setVisibility(View.GONE);
-            } else {
-                navContainer.setVisibility(View.VISIBLE);
+            boolean isAuthDestination = isAuthDestination(destination);
+
+            navContainer.setVisibility(isAuthDestination ? View.GONE : View.VISIBLE);
+
+            if (!isAuthDestination) {
                 updateNavigationSelection(destination.getId());
             }
         });
     }
 
+    private boolean isAuthDestination(NavDestination destination) {
+        return destination != null && (destination.getId() == R.id.navigation_login ||
+                destination.getId() == R.id.navigation_register ||
+                destination.getId() == R.id.navigation_forgot_password);
+    }
+
     private void setupCustomNavigation() {
         navContainer = findViewById(R.id.nav_container);
-        navHome = findViewById(R.id.nav_home);
-        navRecipe = findViewById(R.id.nav_recipe);
-        navMealPlan = findViewById(R.id.nav_meal_plan);
-        navGrocery = findViewById(R.id.nav_grocery);
-        navMap = findViewById(R.id.nav_map);
+        LinearLayout navView = findViewById(R.id.nav_view);
+
+        navItems.add(findViewById(R.id.nav_home));
+        navItems.add(findViewById(R.id.nav_recipe));
+        navItems.add(findViewById(R.id.nav_meal_plan));
+        navItems.add(findViewById(R.id.nav_grocery));
+        navItems.add(findViewById(R.id.nav_map));
+
+        // Enable animations on the container
+        LayoutTransition layoutTransition = new LayoutTransition();
+        layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
+        navView.setLayoutTransition(layoutTransition);
 
         // Set click listeners
-        navHome.setOnClickListener(v -> {
-            navController.navigate(R.id.navigation_home);
-        });
+        findViewById(R.id.nav_home).setOnClickListener(v -> navigateTo(R.id.navigation_home));
+        findViewById(R.id.nav_recipe).setOnClickListener(v -> navigateTo(R.id.recipeListFragment));
+        findViewById(R.id.nav_meal_plan).setOnClickListener(v -> navigateTo(R.id.mealPlanFragment));
+        findViewById(R.id.nav_grocery).setOnClickListener(v -> navigateTo(R.id.groceryListFragment));
+//        findViewById(R.id.nav_map).setOnClickListener(v -> navigateTo(R.id.mapFragment));
+    }
 
-        navRecipe.setOnClickListener(v -> {
-            navController.navigate(R.id.recipeListFragment);
-        });
-
-        navMealPlan.setOnClickListener(v -> {
-            navController.navigate(R.id.mealPlanFragment);
-        });
-
-        navGrocery.setOnClickListener(v -> {
-            navController.navigate(R.id.groceryListFragment);
-        });
-
-        navMap.setOnClickListener(v -> {
-            // For now, show coming soon message since map is disabled
-            // navController.navigate(R.id.mapFragment);
-            Toast.makeText(this, "Store Locations feature coming soon!", Toast.LENGTH_SHORT).show();
-        });
+    private void navigateTo(int destinationId) {
+        if (navController.getCurrentDestination() != null && navController.getCurrentDestination().getId() != destinationId) {
+            navController.navigate(destinationId);
+        }
     }
 
     private void updateNavigationSelection(int destinationId) {
-        // Reset all items to unselected state
-        resetAllNavItems();
+        for (LinearLayout item : navItems) {
+            boolean isSelected = false;
+            int itemId = item.getId();
 
-        // Highlight the selected item
-        if (destinationId == R.id.navigation_home) {
-            setNavItemSelected(navHome, R.drawable.ic_home_black_24dp, "Home", true);
-        } else if (destinationId == R.id.recipeListFragment ||
-                destinationId == R.id.addRecipeFragment ||
-                destinationId == R.id.recipeDetailFragment) {
-            setNavItemSelected(navRecipe, R.drawable.ic_restaurant_24, null, false);
-        } else if (destinationId == R.id.mealPlanFragment) {
-            setNavItemSelected(navMealPlan, R.drawable.ic_calendar_today_24, null, false);
-        } else if (destinationId == R.id.groceryListFragment) {
-            setNavItemSelected(navGrocery, R.drawable.ic_shopping_cart_24, null, false);
+            if (itemId == R.id.nav_home && destinationId == R.id.navigation_home) {
+                isSelected = true;
+            } else if (itemId == R.id.nav_recipe && (destinationId == R.id.recipeListFragment || destinationId == R.id.addRecipeFragment || destinationId == R.id.recipeDetailFragment)) {
+                isSelected = true;
+            } else if (itemId == R.id.nav_meal_plan && destinationId == R.id.mealPlanFragment) {
+                isSelected = true;
+            } else if (itemId == R.id.nav_grocery && destinationId == R.id.groceryListFragment) {
+                isSelected = true;
+            }
+//            else if (itemId == R.id.nav_map && destinationId == R.id.mapFragment) {
+//                isSelected = true;
+//            }
+
+            setNavItemSelected(item, isSelected);
         }
-        // Note: Map case will be added when map feature is re-enabled
     }
 
-    private void resetAllNavItems() {
-        setNavItemSelected(navHome, R.drawable.ic_home_black_24dp, null, false);
-        setNavItemSelected(navRecipe, R.drawable.ic_restaurant_24, null, false);
-        setNavItemSelected(navMealPlan, R.drawable.ic_calendar_today_24, null, false);
-        setNavItemSelected(navGrocery, R.drawable.ic_shopping_cart_24, null, false);
-        setNavItemSelected(navMap, R.drawable.ic_location_on_24, null, false);
-    }
+    private void setNavItemSelected(LinearLayout navItem, boolean isSelected) {
+        ImageView icon = (ImageView) navItem.getChildAt(0);
+        TextView text = (TextView) navItem.getChildAt(1);
 
-    private void setNavItemSelected(LinearLayout navItem, int iconRes, String text, boolean isSelected) {
-        ImageView icon = navItem.getChildAt(0) instanceof ImageView ? (ImageView) navItem.getChildAt(0) : null;
-        TextView textView = null;
-
-        // Find text view if it exists
-        for (int i = 0; i < navItem.getChildCount(); i++) {
-            View child = navItem.getChildAt(i);
-            if (child instanceof TextView) {
-                textView = (TextView) child;
-                break;
-            }
-        }
-
-        if (icon != null) {
-            icon.setImageResource(iconRes);
-            if (isSelected) {
-                icon.setColorFilter(ContextCompat.getColor(this, R.color.purple_700));
-                navItem.setBackgroundResource(R.drawable.nav_item_selected_background);
-            } else {
-                icon.setColorFilter(ContextCompat.getColor(this, android.R.color.white));
-                navItem.setBackgroundResource(R.drawable.nav_item_background);
-            }
-        }
-
-        if (textView != null) {
-            if (isSelected && text != null) {
-                textView.setText(text);
-                textView.setVisibility(View.VISIBLE);
-                textView.setTextColor(ContextCompat.getColor(this, R.color.purple_700));
-            } else {
-                textView.setVisibility(View.GONE);
-            }
+        if (isSelected) {
+            navItem.setBackgroundResource(R.drawable.nav_item_selected_background);
+            icon.setColorFilter(ContextCompat.getColor(this, R.color.purple_700));
+            text.setVisibility(View.VISIBLE);
+        } else {
+            navItem.setBackgroundResource(R.drawable.nav_item_background);
+            icon.setColorFilter(ContextCompat.getColor(this, android.R.color.white));
+            text.setVisibility(View.GONE);
         }
     }
 
@@ -159,22 +135,18 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         NavDestination currentDestination = navController.getCurrentDestination();
 
+        boolean isAuthDestination = currentDestination != null &&
+                (currentDestination.getId() == R.id.navigation_login ||
+                        currentDestination.getId() == R.id.navigation_register ||
+                        currentDestination.getId() == R.id.navigation_forgot_password);
+
         if (currentUser != null) {
-            if (currentDestination != null && currentDestination.getId() == R.id.navigation_login) {
-                navController.popBackStack(R.id.navigation_login, true);
-                navController.navigate(R.id.navigation_home);
-            } else if (currentDestination != null &&
-                    (currentDestination.getId() == R.id.navigation_register ||
-                            currentDestination.getId() == R.id.navigation_forgot_password)) {
+            if (isAuthDestination) {
                 navController.popBackStack(currentDestination.getId(), true);
                 navController.navigate(R.id.navigation_home);
             }
         } else {
-            if (currentDestination != null &&
-                    (currentDestination.getId() == R.id.navigation_home ||
-                            currentDestination.getId() == R.id.navigation_dashboard ||
-                            currentDestination.getId() == R.id.navigation_notifications)) {
-
+            if (currentDestination != null && !isAuthDestination) {
                 navController.popBackStack(R.id.mobile_navigation, true);
                 navController.navigate(R.id.navigation_login);
             }
