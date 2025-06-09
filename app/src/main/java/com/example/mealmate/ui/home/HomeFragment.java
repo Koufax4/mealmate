@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -116,10 +117,12 @@ public class HomeFragment extends Fragment {
                     .navigate(R.id.action_navigation_home_to_groceryListFragment);
         });
 
-        // Store Locations Card
+        // Store Locations Card - MAP FEATURE COMMENTED OUT
         binding.cardStoreLocations.setOnClickListener(v -> {
-            NavHostFragment.findNavController(HomeFragment.this)
-                    .navigate(R.id.action_navigation_home_to_mapFragment);
+            // TODO: Re-enable when map feature is ready
+            // NavHostFragment.findNavController(HomeFragment.this)
+            // .navigate(R.id.action_navigation_home_to_mapFragment);
+            Toast.makeText(getContext(), "Store Locations feature coming soon!", Toast.LENGTH_SHORT).show();
         });
     }
 

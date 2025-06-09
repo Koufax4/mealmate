@@ -44,7 +44,6 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
-    implementation(libs.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -52,12 +51,14 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
-    implementation(libs.recyclerview.v132)
-    implementation(libs.swiperefreshlayout)
-    implementation(libs.glide)
-    
-    // Maps and Location Services
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
-    implementation("com.google.android.gms:play-services-location:21.2.0")
-    implementation("com.google.android.libraries.places:places:3.4.0")
+
+    // UI component libraries
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    // Maps and Location Services - COMMENTED OUT
+    // implementation("com.google.android.gms:play-services-maps:18.2.0")
+    // implementation("com.google.android.gms:play-services-location:21.2.0")
+    // implementation("com.google.android.libraries.places:places:3.4.0")
 }

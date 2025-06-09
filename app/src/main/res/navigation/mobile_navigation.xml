@@ -60,9 +60,10 @@
         <action
             android:id="@+id/action_navigation_home_to_groceryListFragment"
             app:destination="@id/groceryListFragment" />
-        <action
+        <!-- Map navigation action - COMMENTED OUT -->
+        <!-- <action
             android:id="@+id/action_navigation_home_to_mapFragment"
-            app:destination="@id/mapFragment" />
+            app:destination="@id/mapFragment" /> -->
     </fragment>
 
     <fragment
@@ -129,11 +130,11 @@
         android:label="Grocery List"
         tools:layout="@layout/fragment_grocery_list" />
 
-    <!-- Map Fragment -->
-    <fragment
+    <!-- Map Fragment - COMMENTED OUT -->
+    <!-- <fragment
         android:id="@+id/mapFragment"
         android:name="com.example.mealmate.ui.map.MapFragment"
         android:label="Store Locations"
-        tools:layout="@layout/fragment_map" />
+        tools:layout="@layout/fragment_map" /> -->
 
 </navigation>

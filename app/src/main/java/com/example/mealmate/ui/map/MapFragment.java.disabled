@@ -1,9 +1,11 @@
 package com.example.mealmate.ui.map;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,12 +43,13 @@ import java.util.List;
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
+    private static final String TAG = "MapFragment";
     private FragmentMapBinding binding;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
     private PlacesClient placesClient;
 
-    private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
+    private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
             new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
                     // Permission granted, get user location
@@ -63,9 +66,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Initialize Places SDK
+        // !! IMPORTANT !!
+        // You must replace "YOUR_API_KEY" in AndroidManifest.xml for this to work.
         if (!Places.isInitialized()) {
-            Places.initialize(requireContext(), "YOUR_API_KEY");
+            // It's recommended to get the key from a secure place, but for this example,
+            // it's in the manifest.
+            // NOTE: The API key in the manifest is read automatically by the SDK.
+            // You only need to initialize the library.
+            Places.initialize(requireContext(), getString(R.string.google_maps_key));
         }
         placesClient = Places.createClient(requireContext());
 
@@ -129,7 +137,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    @SuppressLint("MissingPermission")
     private void getUserLocationAndFindStores() {
+        // Double-check permission before proceeding
         if (ContextCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -146,11 +156,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 14f));
 
                         // Enable my location dot
-                        try {
-                            mMap.setMyLocationEnabled(true);
-                        } catch (SecurityException e) {
-                            // Handle exception
-                        }
+                        mMap.setMyLocationEnabled(true);
 
                         // Find nearby stores
                         findNearbyStores();
@@ -168,6 +174,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 });
     }
 
+    @SuppressLint("MissingPermission")
     private void findNearbyStores() {
         showLoading("Finding nearby stores...");
 
@@ -181,17 +188,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Create the request
         FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
 
-        if (ContextCompat.checkSelfPermission(requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-
         placesClient.findCurrentPlace(request)
                 .addOnSuccessListener(response -> {
                     int storeCount = 0;
 
                     for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
                         Place place = placeLikelihood.getPlace();
+                        Log.d(TAG, String.format("Place '%s' has likelihood %f and types %s", place.getName(),
+                                placeLikelihood.getLikelihood(), place.getTypes()));
 
                         // Check if this place is a grocery store or supermarket
                         if (place.getTypes() != null &&
@@ -226,6 +230,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 })
                 .addOnFailureListener(exception -> {
                     hideLoading();
+                    Log.e(TAG, "Error finding stores", exception);
                     Toast.makeText(getContext(), "Error finding stores: " + exception.getMessage(),
                             Toast.LENGTH_LONG).show();
                 });
