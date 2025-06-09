@@ -55,4 +55,9 @@ dependencies {
     implementation(libs.recyclerview.v132)
     implementation(libs.swiperefreshlayout)
     implementation(libs.glide)
+    
+    // Maps and Location Services
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.gms:play-services-location:21.2.0")
+    implementation("com.google.android.libraries.places:places:3.4.0")
 }

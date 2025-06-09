@@ -118,9 +118,8 @@ public class HomeFragment extends Fragment {
 
         // Store Locations Card
         binding.cardStoreLocations.setOnClickListener(v -> {
-            // TODO: Navigate to store locations fragment or open map
-            // NavHostFragment.findNavController(HomeFragment.this)
-            // .navigate(R.id.navigation_store_locations);
+            NavHostFragment.findNavController(HomeFragment.this)
+                    .navigate(R.id.action_navigation_home_to_mapFragment);
         });
     }
 

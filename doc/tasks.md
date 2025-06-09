@@ -133,50 +133,41 @@
     - [x] Pre-populates message body with formatted grocery list.
     - [x] Added proper error handling for devices without SMS apps.
 
-## Phase 7: Optional Feature - Geotagging a Store (PRD: OF1.1, OF1.2, OF1.3)
+## Phase 7: Advanced Geotagging - In-App Store Discovery (REFACTORED)
 
-- [ ] **Data Model:**
-  - [ ] Create `com.example.mealmate.data.model.StoreLocation.java`.
-- [ ] **Store Management:**
-  - [ ] Create `StoreRepository.java` and `StoreViewModel.java`.
-  - [ ] Create `AddStoreFragment.java` and `fragment_add_store.xml`.
-    - [ ] UI for store name.
-    - [ ] Button to "Pin on Map" or "Use Current Location".
-  - [ ] Save store data (name, lat, lng) to Firestore (e.g., `/users/{userId}/favoriteStores/{storeId}`).
-- [ ] **Map Integration:**
-  - [ ] Add Google Maps SDK dependency and API key setup (as per `doc/technical.md`).
-  - [ ] Create `MapFragment.java` and `fragment_map.xml`.
-    - [ ] Integrate Google Map view.
-    - [ ] Logic to get current location (`FusedLocationProviderClient`).
-    - [ ] Allow user to drop a pin or select current location.
-    - [ ] Display saved stores as markers.
-  - [ ] Handle `ACCESS_FINE_LOCATION` permission (request at runtime).
-- [ ] **Link Stores to Lists/Items (PRD: OF1.2 - Optional part):**
-  - [ ] (Optional) Extend grocery list/item model to include `storeId`.
-  - [ ] (Optional) UI to associate lists/items with a saved store.
+**OBSOLETE TASKS (Old approach):**
+~~- Data Model creation for manual store entry~~
+~~- Store Repository and ViewModel for user-saved stores~~
+~~- Manual pin dropping and store saving functionality~~
 
-## Phase 8: Testing & Polish
+**NEW IMPLEMENTATION - Advanced Store Discovery:**
 
-- [ ] **Unit Tests:**
-  - [ ] Write unit tests for ViewModels (logic, LiveData updates).
-  - [ ] Write unit tests for Repositories (mocking Firebase interactions if complex).
-- [ ] **UI Tests (Espresso):**
-  - [ ] Basic UI tests for login flow.
-  - [ ] Tests for recipe creation.
-  - [ ] Tests for grocery list generation and item management.
-- [ ] **UI/UX Polish:**
-  - [ ] Ensure consistent Material Design.
-  - [ ] Add loading indicators for all async operations.
-  - [ ] Improve error handling and user feedback.
-  - [ ] Add Glide dependency and integrate for all image loading.
-- [ ] **Documentation:**
-  - [ ] Update all `doc/*.md` files as features are completed or designs change.
-  - [ ] Ensure Javadoc for public APIs in classes.
-  - [ ] Populate `fixes/` directory if complex bugs are encountered and solved.
-
-## Backlog / Future Considerations
-
-- [ ] `DashboardFragment` and `NotificationsFragment` actual implementation (currently placeholders).
-- [ ] Advanced search/filter for recipes.
-- [ ] More sophisticated meal planning UI (drag & drop, calendar view).
-- [ ] User profile screen with edit capabilities.
+- [x] **Dependencies and Setup:**
+  - [x] Add Google Maps SDK dependency (`play-services-maps:18.2.0`)
+  - [x] Add Google Places SDK dependency (`places:3.4.0`)
+  - [x] Add Location Services dependency (`play-services-location:21.2.0`)
+  - [x] Add `ACCESS_FINE_LOCATION` permission to AndroidManifest.xml
+  - [x] Add Google Maps API key placeholder to AndroidManifest.xml
+- [x] **Full-Screen Map UI:**
+  - [x] Create `fragment_map.xml` with custom header and SupportMapFragment
+  - [x] Create `ic_refresh_24.xml` drawable for refresh functionality
+  - [x] Implement loading states and user feedback
+- [x] **MapFragment Implementation:**
+  - [x] Create `MapFragment.java` implementing OnMapReadyCallback
+  - [x] Initialize Places SDK and location services
+  - [x] Handle location permissions with ActivityResultLauncher
+  - [x] Integrate with FusedLocationProviderClient for user location
+  - [x] Implement Google Places API integration for store discovery
+  - [x] Filter results for grocery stores and supermarkets only
+  - [x] Display stores as map markers with names and addresses
+  - [x] Add refresh functionality to reload nearby stores
+- [x] **Navigation Integration:**
+  - [x] Add MapFragment destination to `mobile_navigation.xml`
+  - [x] Create navigation action from HomeFragment to MapFragment
+  - [x] Update HomeFragment Store Locations card click handler
+- [x] **Advanced Features:**
+  - [x] Real-time store discovery using Google Places API
+  - [x] Automatic filtering for grocery/supermarket types
+  - [x] User location centering with appropriate zoom level
+  - [x] Comprehensive error handling and user feedback
+  - [x] Permission-based flow with graceful degradation
