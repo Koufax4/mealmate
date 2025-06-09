@@ -57,6 +57,9 @@
         <action
             android:id="@+id/action_navigation_home_to_mealPlanFragment"
             app:destination="@id/mealPlanFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_groceryListFragment"
+            app:destination="@id/groceryListFragment" />
     </fragment>
 
     <fragment
@@ -112,8 +115,8 @@
         android:label="Meal Planner"
         tools:layout="@layout/fragment_meal_plan" >
         <action
-            android:id="@+id/action_mealPlanFragment_to_groceryListFragment"
-            app:destination="@id/groceryListFragment" />
+            android:id="@+id/action_mealPlanFragment_to_recipeDetailFragment"
+            app:destination="@id/recipeDetailFragment" />
     </fragment>
 
     <!-- Grocery List Fragment -->
@@ -121,10 +124,6 @@
         android:id="@+id/groceryListFragment"
         android:name="com.example.mealmate.ui.grocery.GroceryListFragment"
         android:label="Grocery List"
-        tools:layout="@layout/fragment_grocery_list">
-        <argument
-            android:name="meal_plan_id"
-            app:argType="string" />
-    </fragment>
+        tools:layout="@layout/fragment_grocery_list" />
 
 </navigation>

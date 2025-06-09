@@ -23,25 +23,13 @@ import java.util.List;
  */
 public class GroceryListFragment extends Fragment implements GroceryItemAdapter.OnItemClickListener {
 
-    private static final String ARG_MEAL_PLAN_ID = "meal_plan_id";
-
     private FragmentGroceryListBinding binding;
     private GroceryViewModel groceryViewModel;
     private GroceryItemAdapter adapter;
 
-    private String mealPlanId;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mealPlanId = getArguments().getString(ARG_MEAL_PLAN_ID);
-        }
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         binding = FragmentGroceryListBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -56,12 +44,8 @@ public class GroceryListFragment extends Fragment implements GroceryItemAdapter.
         setupClickListeners();
         observeViewModel();
 
-        // Generate grocery list from the meal plan ID
-        if (mealPlanId != null) {
-            groceryViewModel.generateGroceryListFromPlanId(mealPlanId);
-        } else {
-            showError("No meal plan provided");
-        }
+        // Load the main grocery list
+        groceryViewModel.loadGroceryList();
     }
 
     private void setupRecyclerView() {
@@ -117,7 +101,8 @@ public class GroceryListFragment extends Fragment implements GroceryItemAdapter.
             }
         });
 
-        // Other observers for updateItemResult, generateListResult can be added if specific UI feedback is needed
+        // Other observers for updateItemResult, generateListResult can be added if
+        // specific UI feedback is needed
     }
 
     private void showLoading() {
@@ -150,13 +135,13 @@ public class GroceryListFragment extends Fragment implements GroceryItemAdapter.
     }
 
     private void showError(String message) {
-        if(getContext() != null) {
+        if (getContext() != null) {
             Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
         }
     }
 
     private void showSuccess(String message) {
-        if(getContext() != null) {
+        if (getContext() != null) {
             Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         }
     }

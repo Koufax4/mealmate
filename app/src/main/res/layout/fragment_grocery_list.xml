@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:gravity="center"
-                    android:text="Add some recipes to your meal plan to generate a grocery list"
+                    android:text="Add ingredients from recipes to start building your grocery list"
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="?attr/colorOnSurfaceVariant" />
 

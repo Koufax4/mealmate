@@ -10,21 +10,14 @@ import androidx.lifecycle.ViewModel;
 import com.example.mealmate.data.model.AuthResource;
 import com.example.mealmate.data.model.GroceryItem;
 import com.example.mealmate.data.model.Ingredient;
-import com.example.mealmate.data.model.MealPlan;
-import com.example.mealmate.data.model.Recipe;
 import com.example.mealmate.data.repository.GroceryRepository;
-import com.example.mealmate.data.repository.MealPlanRepository;
-import com.example.mealmate.data.repository.RecipeRepository;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -33,10 +26,9 @@ import java.util.UUID;
 public class GroceryViewModel extends ViewModel {
 
     private static final String TAG = "GroceryViewModel";
+    private static final String MAIN_GROCERY_LIST_ID = "main_list";
 
     private final GroceryRepository groceryRepository;
-    private final MealPlanRepository mealPlanRepository; // Added for loading the meal plan
-    private final RecipeRepository recipeRepository;
 
     // LiveData for grocery list
     private final MutableLiveData<AuthResource<List<GroceryItem>>> groceryListLiveData = new MutableLiveData<>();
@@ -44,15 +36,10 @@ public class GroceryViewModel extends ViewModel {
     // LiveData for operation results
     private final MutableLiveData<AuthResource<Void>> updateItemResult = new MutableLiveData<>();
     private final MutableLiveData<AuthResource<Void>> deleteItemResult = new MutableLiveData<>();
-    private final MutableLiveData<AuthResource<Void>> generateListResult = new MutableLiveData<>();
-
-    // Current grocery list ID
-    private String currentGroceryListId;
+    private final MutableLiveData<AuthResource<Void>> addIngredientsResult = new MutableLiveData<>();
 
     public GroceryViewModel() {
         this.groceryRepository = new GroceryRepository();
-        this.mealPlanRepository = new MealPlanRepository(); // Added
-        this.recipeRepository = new RecipeRepository();
     }
 
     /**
@@ -77,170 +64,164 @@ public class GroceryViewModel extends ViewModel {
     }
 
     /**
-     * Gets the LiveData for generate list result.
+     * Gets the LiveData for add ingredients result.
      */
-    public LiveData<AuthResource<Void>> getGenerateListResult() {
-        return generateListResult;
+    public LiveData<AuthResource<Void>> getAddIngredientsResult() {
+        return addIngredientsResult;
     }
 
     /**
-     * Loads an existing grocery list by ID.
+     * Loads the main grocery list.
      */
     public void loadGroceryList() {
-        if (currentGroceryListId != null) {
-            groceryRepository.getGroceryList(currentGroceryListId, groceryListLiveData);
-        } else {
-            groceryListLiveData.setValue(AuthResource.error("Grocery list ID is not set.", null));
-        }
+        groceryRepository.getGroceryList(MAIN_GROCERY_LIST_ID, groceryListLiveData);
     }
 
     /**
-     * Kicks off the process of generating a grocery list by first loading the
-     * meal plan.
+     * Adds ingredients from a recipe to the main grocery list.
+     * This method consolidates duplicate ingredients and saves the updated list.
      */
-    public void generateGroceryListFromPlanId(String mealPlanId) {
-        // A grocery list is uniquely tied to a meal plan
-        this.currentGroceryListId = "grocery_" + mealPlanId;
-
-        // First, check if a list already exists. If so, load it.
-        groceryRepository.getGroceryList(currentGroceryListId, new MutableLiveData<AuthResource<List<GroceryItem>>>() {
-            @Override
-            public void setValue(AuthResource<List<GroceryItem>> value) {
-                super.setValue(value);
-                if (value.status == AuthResource.Status.SUCCESS && value.data != null && !value.data.isEmpty()) {
-                    // List already exists, just display it.
-                    groceryListLiveData.setValue(value);
-                } else {
-                    // List doesn't exist, so we generate it.
-                    loadMealPlanAndGenerateList(mealPlanId);
-                }
-            }
-        });
-    }
-
-    /**
-     * Loads the MealPlan object from Firestore before generating the list.
-     */
-    private void loadMealPlanAndGenerateList(String mealPlanId) {
-        generateListResult.setValue(AuthResource.loading(null));
-        mealPlanRepository.getMealPlanById(mealPlanId, new MutableLiveData<AuthResource<MealPlan>>() {
-            @Override
-            public void setValue(AuthResource<MealPlan> resource) {
-                if (resource.status == AuthResource.Status.SUCCESS && resource.data != null) {
-                    generateGroceryListFromPlan(resource.data);
-                } else if (resource.status == AuthResource.Status.ERROR) {
-                    generateListResult.setValue(AuthResource.error(resource.message, null));
-                }
-            }
-        });
-    }
-
-    /**
-     * Generates a consolidated grocery list from a meal plan object.
-     */
-    private void generateGroceryListFromPlan(@NonNull MealPlan mealPlan) {
-        Log.d(TAG, "Starting grocery list generation for meal plan: " + mealPlan.getName());
-
-        Set<String> uniqueRecipeIds = new HashSet<>();
-        if (mealPlan.getDays() != null) {
-            for (List<String> dayRecipes : mealPlan.getDays().values()) {
-                if (dayRecipes != null) {
-                    uniqueRecipeIds.addAll(dayRecipes);
-                }
-            }
-        }
-
-        if (uniqueRecipeIds.isEmpty()) {
-            Log.w(TAG, "No recipes found in meal plan");
-            groceryListLiveData.setValue(AuthResource.success(new ArrayList<>()));
-            generateListResult.setValue(AuthResource.success(null));
+    public void addIngredientsToGroceryList(List<Ingredient> ingredients) {
+        if (ingredients == null || ingredients.isEmpty()) {
+            addIngredientsResult.setValue(AuthResource.success(null));
             return;
         }
 
-        fetchAllRecipes(new ArrayList<>(uniqueRecipeIds));
-    }
+        addIngredientsResult.setValue(AuthResource.loading(null));
 
-    private void fetchAllRecipes(List<String> recipeIds) {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        FirebaseFirestore.getInstance().collection("users")
-                .document(userId)
-                .collection("recipes")
-                .whereIn("recipeId", recipeIds)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    Map<String, GroceryItem> consolidatedItems = new HashMap<>();
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        Recipe recipe = doc.toObject(Recipe.class);
-                        if (recipe.getIngredients() != null) {
-                            for (Ingredient ingredient : recipe.getIngredients()) {
-                                addIngredientToConsolidatedList(ingredient, recipe.getRecipeId(), consolidatedItems);
-                            }
-                        }
-                    }
-                    List<GroceryItem> finalList = new ArrayList<>(consolidatedItems.values());
-                    groceryRepository.saveGroceryList(currentGroceryListId, finalList, generateListResult);
-                    groceryListLiveData.setValue(AuthResource.success(finalList));
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Failed to fetch recipes for grocery list", e);
-                    generateListResult.setValue(AuthResource.error(e.getMessage(), null));
-                });
-    }
+        // First, get the current grocery list
+        MutableLiveData<AuthResource<List<GroceryItem>>> currentListLiveData = new MutableLiveData<>();
+        groceryRepository.getGroceryList(MAIN_GROCERY_LIST_ID, currentListLiveData);
 
+        currentListLiveData.observeForever(resource -> {
+            if (resource.status == AuthResource.Status.SUCCESS) {
+                List<GroceryItem> currentItems = resource.data != null ? resource.data : new ArrayList<>();
+
+                // Create a map for easy consolidation
+                Map<String, GroceryItem> consolidatedItems = new HashMap<>();
+
+                // Add existing items to the map
+                for (GroceryItem item : currentItems) {
+                    consolidatedItems.put(item.getName().toLowerCase().trim(), item);
+                }
+
+                // Add new ingredients, consolidating duplicates
+                for (Ingredient ingredient : ingredients) {
+                    addIngredientToConsolidatedList(ingredient, consolidatedItems);
+                }
+
+                // Save the updated list
+                List<GroceryItem> finalList = new ArrayList<>(consolidatedItems.values());
+                groceryRepository.saveGroceryList(MAIN_GROCERY_LIST_ID, finalList, addIngredientsResult);
+
+                // Update the main grocery list LiveData
+                groceryListLiveData.setValue(AuthResource.success(finalList));
+
+            } else if (resource.status == AuthResource.Status.ERROR) {
+                addIngredientsResult.setValue(AuthResource.error(resource.message, null));
+            }
+        });
+    }
 
     /**
      * Adds an ingredient to the consolidated grocery list, combining quantities if
      * the same item exists.
      */
-    private void addIngredientToConsolidatedList(Ingredient ingredient, String recipeId,
-                                                 Map<String, GroceryItem> consolidatedItems) {
-
+    private void addIngredientToConsolidatedList(Ingredient ingredient, Map<String, GroceryItem> consolidatedItems) {
         if (ingredient.getName() == null || ingredient.getName().trim().isEmpty()) {
             return;
         }
 
-        String consolidationKey = ingredient.getName().toLowerCase().trim() + "|" +
-                (ingredient.getUnit() != null ? ingredient.getUnit().toLowerCase().trim() : "");
+        String normalizedName = ingredient.getName().toLowerCase().trim();
 
-        if (consolidatedItems.containsKey(consolidationKey)) {
-            GroceryItem existingItem = consolidatedItems.get(consolidationKey);
-            if(existingItem != null) {
-                double newQuantity = existingItem.getQuantity() + ingredient.getQuantity();
-                existingItem.setQuantity(newQuantity);
+        if (consolidatedItems.containsKey(normalizedName)) {
+            // Item already exists, update quantity and combine units if different
+            GroceryItem existingItem = consolidatedItems.get(normalizedName);
+
+            try {
+                double existingQuantity = existingItem.getQuantity();
+                double newQuantity = Double.parseDouble(ingredient.getQuantity());
+
+                // If units are the same or one is empty, just add quantities
+                if (existingItem.getUnit().equals(ingredient.getUnit()) ||
+                        existingItem.getUnit().isEmpty() || ingredient.getUnit().isEmpty()) {
+
+                    existingItem.setQuantity(existingQuantity + newQuantity);
+                    if (existingItem.getUnit().isEmpty() && !ingredient.getUnit().isEmpty()) {
+                        existingItem.setUnit(ingredient.getUnit());
+                    }
+                } else {
+                    // Different units, add to notes field
+                    String currentNotes = existingItem.getNotes() != null ? existingItem.getNotes() : "";
+                    String additionalNote = " + " + ingredient.getQuantity() + " " + ingredient.getUnit();
+                    existingItem.setNotes(currentNotes + additionalNote);
+                }
+            } catch (NumberFormatException e) {
+                // If new quantity isn't parseable as number, add to notes
+                String currentNotes = existingItem.getNotes() != null ? existingItem.getNotes() : "";
+                String additionalNote = " + " + ingredient.getQuantity() + " " + ingredient.getUnit();
+                existingItem.setNotes(currentNotes + additionalNote);
             }
         } else {
+            // New item, create GroceryItem
             GroceryItem newItem = new GroceryItem();
             newItem.setItemId(UUID.randomUUID().toString());
             newItem.setName(ingredient.getName());
-            newItem.setQuantity(ingredient.getQuantity());
+            try {
+                newItem.setQuantity(Double.parseDouble(ingredient.getQuantity()));
+            } catch (NumberFormatException e) {
+                newItem.setQuantity(1.0); // Default to 1 if quantity is not a number
+            }
             newItem.setUnit(ingredient.getUnit());
-            newItem.setCategory(ingredient.getCategory());
             newItem.setPurchased(false);
-            newItem.setRecipeId(recipeId);
-            consolidatedItems.put(consolidationKey, newItem);
+            newItem.setCategory(categorizeIngredient(ingredient.getName()));
+
+            consolidatedItems.put(normalizedName, newItem);
         }
     }
 
     /**
-     * Updates a grocery item (e.g., purchased status).
+     * Simple categorization of ingredients (can be enhanced later).
+     */
+    private String categorizeIngredient(String ingredientName) {
+        String name = ingredientName.toLowerCase();
+
+        if (name.contains("milk") || name.contains("cheese") || name.contains("yogurt") ||
+                name.contains("butter") || name.contains("cream")) {
+            return "Dairy";
+        } else if (name.contains("apple") || name.contains("banana") || name.contains("orange") ||
+                name.contains("berry") || name.contains("fruit")) {
+            return "Fruits";
+        } else if (name.contains("potato") || name.contains("carrot") || name.contains("onion") ||
+                name.contains("tomato") || name.contains("lettuce") || name.contains("vegetable")) {
+            return "Vegetables";
+        } else if (name.contains("chicken") || name.contains("beef") || name.contains("pork") ||
+                name.contains("fish") || name.contains("meat")) {
+            return "Meat & Seafood";
+        } else if (name.contains("bread") || name.contains("pasta") || name.contains("rice") ||
+                name.contains("flour") || name.contains("cereal")) {
+            return "Grains & Bakery";
+        } else {
+            return "Other";
+        }
+    }
+
+    /**
+     * Updates a grocery item's state.
      */
     public void updateItem(GroceryItem item) {
-        if (currentGroceryListId == null) {
-            updateItemResult.setValue(AuthResource.error("No grocery list loaded", null));
-            return;
+        if (item != null) {
+            groceryRepository.updateGroceryItem(MAIN_GROCERY_LIST_ID, item, updateItemResult);
         }
-        groceryRepository.updateGroceryItem(currentGroceryListId, item, updateItemResult);
     }
 
     /**
-     * Deletes a grocery item from the list.
+     * Deletes a grocery item.
      */
     public void deleteItem(GroceryItem item) {
-        if (currentGroceryListId == null) {
-            deleteItemResult.setValue(AuthResource.error("No grocery list loaded", null));
-            return;
+        if (item != null) {
+            groceryRepository.deleteGroceryItem(MAIN_GROCERY_LIST_ID, item, deleteItemResult);
         }
-        groceryRepository.deleteGroceryItem(currentGroceryListId, item, deleteItemResult);
     }
 
     /**
@@ -258,9 +239,9 @@ public class GroceryViewModel extends ViewModel {
     }
 
     /**
-     * Clears the generate list result.
+     * Clears the add ingredients result.
      */
-    public void clearGenerateListResult() {
-        generateListResult.setValue(null);
+    public void clearAddIngredientsResult() {
+        addIngredientsResult.setValue(null);
     }
 }

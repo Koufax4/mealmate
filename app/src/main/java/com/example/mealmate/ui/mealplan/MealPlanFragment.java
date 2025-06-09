@@ -105,9 +105,6 @@ public class MealPlanFragment extends Fragment {
         // Save meal plan
         binding.fabSaveMealPlan.setOnClickListener(v -> mealPlanViewModel.saveMealPlan());
 
-        // Generate grocery list
-        binding.fabGenerateGroceryList.setOnClickListener(v -> generateGroceryList());
-
         // Add recipe buttons for each day
         for (Map.Entry<String, MaterialCardView> entry : addButtons.entrySet()) {
             String day = entry.getKey();
@@ -249,6 +246,14 @@ public class MealPlanFragment extends Fragment {
         recipeCard.setCardElevation(2 * getResources().getDisplayMetrics().density);
         recipeCard.setClickable(true);
         recipeCard.setFocusable(true);
+        // Navigate to recipe detail when clicked
+        recipeCard.setOnClickListener(v -> {
+            Bundle args = new Bundle();
+            args.putString("recipeId", recipeId);
+            args.putString("recipeName", recipeName);
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_mealPlanFragment_to_recipeDetailFragment, args);
+        });
         // The following line caused the crash and is not needed for the ripple effect.
         // recipeCard.setForeground(getResources().getDrawable(android.R.attr.selectableItemBackground,
         // null));
@@ -302,38 +307,6 @@ public class MealPlanFragment extends Fragment {
         // Add to day layout (before the add button)
         int addButtonIndex = dayLayout.getChildCount() - 1;
         dayLayout.addView(recipeCard, addButtonIndex);
-    }
-
-    /**
-     * Generates a grocery list from the current meal plan.
-     */
-    private void generateGroceryList() {
-        MealPlan currentMealPlan = mealPlanViewModel.getCurrentMealPlan();
-        if (currentMealPlan == null || currentMealPlan.getPlanId() == null) {
-            showError("Please save your meal plan first before generating a grocery list");
-            return;
-        }
-
-        boolean hasRecipes = false;
-        if (currentMealPlan.getDays() != null) {
-            for (List<String> dayRecipes : currentMealPlan.getDays().values()) {
-                if (dayRecipes != null && !dayRecipes.isEmpty()) {
-                    hasRecipes = true;
-                    break;
-                }
-            }
-        }
-
-        if (!hasRecipes) {
-            showError("Add some recipes to your meal plan first");
-            return;
-        }
-
-        // Navigate to grocery list fragment with the meal plan ID
-        Bundle args = new Bundle();
-        args.putString("meal_plan_id", currentMealPlan.getPlanId());
-        NavHostFragment.findNavController(this)
-                .navigate(R.id.action_mealPlanFragment_to_groceryListFragment, args);
     }
 
     /**

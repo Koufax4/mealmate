@@ -112,9 +112,8 @@ public class HomeFragment extends Fragment {
 
         // Grocery Lists Card
         binding.cardGroceryLists.setOnClickListener(v -> {
-            // TODO: Navigate to grocery lists fragment
-            // NavHostFragment.findNavController(HomeFragment.this)
-            // .navigate(R.id.navigation_grocery_lists);
+            NavHostFragment.findNavController(HomeFragment.this)
+                    .navigate(R.id.action_navigation_home_to_groceryListFragment);
         });
 
         // Store Locations Card

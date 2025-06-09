@@ -21,7 +21,9 @@ import com.bumptech.glide.Glide;
 import com.example.mealmate.R;
 import com.example.mealmate.data.model.AuthResource;
 import com.example.mealmate.data.model.Recipe;
+import com.example.mealmate.ui.grocery.GroceryViewModel;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import android.widget.ImageButton;
 
@@ -31,11 +33,15 @@ import android.widget.ImageButton;
 public class RecipeDetailFragment extends Fragment {
 
     private RecipeViewModel recipeViewModel;
+    private GroceryViewModel groceryViewModel;
     private IngredientDisplayAdapter ingredientDisplayAdapter;
 
     // Arguments
     private String recipeId;
     private String recipeName;
+
+    // Current recipe data
+    private Recipe currentRecipe;
 
     // UI Components
     private ImageView imageViewRecipe;
@@ -52,12 +58,14 @@ public class RecipeDetailFragment extends Fragment {
     private MaterialButton buttonRetry;
     private ImageButton buttonBack;
     private TextView textViewHeaderTitle;
+    private FloatingActionButton fabAddToGroceryList;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
+        groceryViewModel = new ViewModelProvider(this).get(GroceryViewModel.class);
 
         // Get arguments
         if (getArguments() != null) {
@@ -106,6 +114,7 @@ public class RecipeDetailFragment extends Fragment {
         buttonBack = view.findViewById(R.id.buttonBack);
         textViewHeaderTitle = view.findViewById(R.id.textViewHeaderTitle);
         imageViewRecipe = view.findViewById(R.id.imageViewRecipe);
+        fabAddToGroceryList = view.findViewById(R.id.fabAddToGroceryList);
     }
 
     private void setupRecyclerView() {
@@ -117,6 +126,7 @@ public class RecipeDetailFragment extends Fragment {
     private void setupClickListeners() {
         buttonRetry.setOnClickListener(v -> loadRecipeDetail());
         buttonBack.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
+        fabAddToGroceryList.setOnClickListener(v -> addToGroceryList());
     }
 
     private void loadRecipeDetail() {
@@ -147,6 +157,25 @@ public class RecipeDetailFragment extends Fragment {
                 }
             }
         });
+
+        // Observe add ingredients result
+        groceryViewModel.getAddIngredientsResult().observe(getViewLifecycleOwner(), resource -> {
+            if (resource != null) {
+                switch (resource.status) {
+                    case SUCCESS:
+                        showMessage("Ingredients added to grocery list!");
+                        groceryViewModel.clearAddIngredientsResult();
+                        break;
+                    case ERROR:
+                        showMessage("Failed to add ingredients: " + resource.message);
+                        groceryViewModel.clearAddIngredientsResult();
+                        break;
+                    case LOADING:
+                        // Could show a loading indicator on the FAB if desired
+                        break;
+                }
+            }
+        });
     }
 
     private void showLoadingState() {
@@ -160,6 +189,7 @@ public class RecipeDetailFragment extends Fragment {
         layoutError.setVisibility(View.GONE);
         showRecipeContent();
 
+        currentRecipe = recipe; // Store the recipe for adding to grocery list
         populateRecipeData(recipe);
     }
 
@@ -244,6 +274,23 @@ public class RecipeDetailFragment extends Fragment {
         } else {
             Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
         }
+    }
+
+    /**
+     * Adds the current recipe's ingredients to the main grocery list.
+     */
+    private void addToGroceryList() {
+        if (currentRecipe == null) {
+            showMessage("No recipe loaded");
+            return;
+        }
+
+        if (currentRecipe.getIngredients() == null || currentRecipe.getIngredients().isEmpty()) {
+            showMessage("This recipe has no ingredients to add");
+            return;
+        }
+
+        groceryViewModel.addIngredientsToGroceryList(currentRecipe.getIngredients());
     }
 
     @Override

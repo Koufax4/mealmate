@@ -677,38 +677,17 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Floating Action Buttons -->
-    <LinearLayout
+    <!-- Save Meal Plan Button -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabSaveMealPlan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:orientation="vertical"
-        android:gravity="end">
-
-        <!-- Generate Grocery List Button -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabGenerateGroceryList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:src="@drawable/ic_shopping_cart_24"
-            app:tint="@color/white"
-            app:backgroundTint="@color/purple_700"
-            app:fabSize="normal"
-            android:contentDescription="Generate Grocery List" />
-
-        <!-- Save Meal Plan Button -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabSaveMealPlan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_save_24"
-            app:tint="@color/white"
-            app:backgroundTint="@color/purple_500"
-            app:fabSize="normal"
-            android:contentDescription="Save Meal Plan" />
-
-    </LinearLayout>
+        android:src="@drawable/ic_save_24"
+        app:tint="@color/white"
+        app:backgroundTint="@color/purple_500"
+        app:fabSize="normal"
+        android:contentDescription="Save Meal Plan" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout> 
