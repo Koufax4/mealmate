@@ -46,6 +46,17 @@
                     android:layout_toEndOf="@id/buttonBack"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="8dp"/>
+
+                <ImageButton
+                    android:id="@+id/buttonShare"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_share_24"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:tint="@color/purple_700"
+                    android:contentDescription="Share grocery list"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"/>
             </RelativeLayout>
 
             <!-- Content Container -->

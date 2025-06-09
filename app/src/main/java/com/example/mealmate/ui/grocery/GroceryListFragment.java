@@ -1,5 +1,7 @@
 package com.example.mealmate.ui.grocery;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +59,7 @@ public class GroceryListFragment extends Fragment implements GroceryItemAdapter.
 
     private void setupClickListeners() {
         binding.buttonBack.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
+        binding.buttonShare.setOnClickListener(v -> shareGroceryList());
     }
 
     private void observeViewModel() {
@@ -174,6 +177,67 @@ public class GroceryListFragment extends Fragment implements GroceryItemAdapter.
     @Override
     public void onDeleteClick(GroceryItem item) {
         groceryViewModel.deleteItem(item);
+    }
+
+    /**
+     * Shares the current grocery list via SMS
+     */
+    private void shareGroceryList() {
+        List<GroceryItem> items = adapter.getCurrentItems();
+
+        // Check if the list is empty
+        if (items == null || items.isEmpty()) {
+            Toast.makeText(getContext(), "Your list is empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Build the message string
+        StringBuilder messageBuilder = new StringBuilder();
+        messageBuilder.append("My Grocery List:\n\n");
+
+        for (GroceryItem item : items) {
+            // Format: [ ] Item Name (Quantity Unit) or [x] for purchased items
+            String checkbox = item.isPurchased() ? "[x]" : "[ ]";
+
+            // Format quantity and unit
+            String quantityText = "";
+            if (item.getQuantity() > 0) {
+                String formattedQuantity;
+                // If the quantity is a whole number, display without decimal
+                if (item.getQuantity() == Math.floor(item.getQuantity())) {
+                    formattedQuantity = String.valueOf((int) item.getQuantity());
+                } else {
+                    formattedQuantity = String.valueOf(item.getQuantity());
+                }
+
+                String unit = item.getUnit() != null && !item.getUnit().trim().isEmpty()
+                        ? " " + item.getUnit().trim()
+                        : "";
+                quantityText = " (" + formattedQuantity + unit + ")";
+            }
+
+            messageBuilder.append(checkbox)
+                    .append(" ")
+                    .append(item.getName())
+                    .append(quantityText)
+                    .append("\n");
+        }
+
+        // Add a signature
+        messageBuilder.append("\nSent from MealMate");
+
+        String message = messageBuilder.toString();
+
+        // Create SMS intent
+        Uri smsUri = Uri.parse("smsto:");
+        Intent intent = new Intent(Intent.ACTION_SENDTO, smsUri);
+        intent.putExtra("sms_body", message);
+
+        try {
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "No SMS app found", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

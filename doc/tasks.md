@@ -120,11 +120,18 @@
 
 ## Phase 6: Item Delegation (SMS) (PRD: F5, US10)
 
-- [ ] **SMS Delegation in `GroceryListFragment`:**
-  - [ ] Add a button/menu option to "Send List via SMS".
-  - [ ] Format the grocery list content into a string.
-  - [ ] Implement sending SMS using `Intent.ACTION_SENDTO` (recommended) or `SmsManager`.
-  - [ ] Handle `SEND_SMS` permission if using `SmsManager` (request at runtime).
+- [x] **SMS Delegation in `GroceryListFragment`:**
+  - [x] Add a button/menu option to "Send List via SMS".
+    - [x] Created `ic_share_24.xml` drawable for the share icon.
+    - [x] Added share button to the custom header in `fragment_grocery_list.xml`.
+  - [x] Format the grocery list content into a string.
+    - [x] Implemented clean formatting: `[ ] Item Name (Quantity Unit)` for unchecked items.
+    - [x] Used `[x]` for purchased items to show completion status.
+    - [x] Added professional signature line "Sent from MealMate".
+  - [x] Implement sending SMS using `Intent.ACTION_SENDTO` (recommended) approach.
+    - [x] No permissions needed - uses implicit intent to launch user's default SMS app.
+    - [x] Pre-populates message body with formatted grocery list.
+    - [x] Added proper error handling for devices without SMS apps.
 
 ## Phase 7: Optional Feature - Geotagging a Store (PRD: OF1.1, OF1.2, OF1.3)
 
