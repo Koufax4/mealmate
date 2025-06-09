@@ -24,11 +24,12 @@ Phase 6 implements Item Delegation (SMS) functionality, allowing users to share 
 #### Share Logic (`shareGroceryList()` method)
 
 1. **Empty List Check**: Displays "Your list is empty!" toast if no items exist
-2. **Message Formatting**: Creates a clean, readable format:
-   - Header: "My Grocery List:"
-   - Each item: `[x] Item Name (Quantity Unit)` for purchased items
-   - Each item: `[ ] Item Name (Quantity Unit)` for unpurchased items
-   - Footer: "Sent from MealMate"
+2. **Enhanced Message Formatting**: Creates a professional, organized format:
+   - **Header**: Shopping cart emoji and decorative title with summary stats
+   - **Pending Items Section**: "📋 TO BUY:" with ☐ checkbox symbols
+   - **Completed Items Section**: "✅ COMPLETED:" with ☑ checkbox symbols (if any)
+   - **Item Format**: `Item Name (Quantity Unit)` with smart quantity formatting
+   - **Footer**: Mobile emoji with "Sent from MealMate" signature
 
 #### Data Type Handling
 
@@ -46,21 +47,34 @@ Phase 6 implements Item Delegation (SMS) functionality, allowing users to share 
 ### Example Output Format
 
 ```
-My Grocery List:
+🛒 GROCERY LIST
+═══════════════
+Items: 4 | Done: 1
 
-[ ] Milk (2 gallons)
-[x] Bread (1 loaf)
-[ ] Apples (3 lbs)
-[ ] Chicken Breast (2.5 lbs)
+📋 TO BUY:
+☐ Milk (2 gallons)
+☐ Apples (3 lbs)
+☐ Chicken Breast (2.5 lbs)
 
-Sent from MealMate
+✅ COMPLETED:
+☑ Bread (1 loaf)
+
+📱 Sent from MealMate
 ```
+
+## Enhanced Features
+
+- **Smart Organization**: Separates pending items from completed items for better usability
+- **Visual Hierarchy**: Uses emojis and symbols to create clear sections and visual interest
+- **Quick Summary**: Header shows total items and completion progress at a glance
+- **Prioritized Display**: Shows "TO BUY" items first since they're most important
+- **Professional Appearance**: Decorative borders and organized layout look polished
 
 ## Benefits
 
 - **No Permissions Required**: Users don't need to grant SMS permissions
 - **User Privacy**: Users control recipient and can edit message before sending
-- **Clean Format**: Professional, readable grocery list format
+- **Enhanced Readability**: Professional format with clear visual hierarchy
 - **Error Resilient**: Handles edge cases like empty lists and missing apps
 - **Consistent UI**: Matches the app's purple theme and design patterns
 

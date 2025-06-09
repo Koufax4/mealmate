@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.mealmate.data.model.AuthResource;
 import com.example.mealmate.data.model.GroceryItem;
 import com.example.mealmate.databinding.FragmentGroceryListBinding;
 
@@ -92,8 +93,9 @@ public class GroceryListFragment extends Fragment implements GroceryItemAdapter.
                 switch (resource.status) {
                     case SUCCESS:
                         groceryViewModel.clearUpdateItemResult();
-                        // Don't refresh the entire list for individual updates -
-                        // the summary is already updated immediately in onPurchasedToggle
+                        // The UI for the checkbox is updated instantly. The summary is updated in
+                        // onPurchasedToggle.
+                        // No full refresh is needed, which provides a smoother experience.
                         break;
                     case ERROR:
                         showError("Failed to update item: " + resource.message);
@@ -183,54 +185,20 @@ public class GroceryListFragment extends Fragment implements GroceryItemAdapter.
      * Shares the current grocery list via SMS
      */
     private void shareGroceryList() {
-        List<GroceryItem> items = adapter.getCurrentItems();
-
-        // Check if the list is empty
-        if (items == null || items.isEmpty()) {
+        // Get the current list from the LiveData for robustness
+        AuthResource<List<GroceryItem>> resource = groceryViewModel.getGroceryListLiveData().getValue();
+        if (resource == null || resource.status != AuthResource.Status.SUCCESS || resource.data == null
+                || resource.data.isEmpty()) {
             Toast.makeText(getContext(), "Your list is empty!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Build the message string
-        StringBuilder messageBuilder = new StringBuilder();
-        messageBuilder.append("My Grocery List:\n\n");
-
-        for (GroceryItem item : items) {
-            // Format: [ ] Item Name (Quantity Unit) or [x] for purchased items
-            String checkbox = item.isPurchased() ? "[x]" : "[ ]";
-
-            // Format quantity and unit
-            String quantityText = "";
-            if (item.getQuantity() > 0) {
-                String formattedQuantity;
-                // If the quantity is a whole number, display without decimal
-                if (item.getQuantity() == Math.floor(item.getQuantity())) {
-                    formattedQuantity = String.valueOf((int) item.getQuantity());
-                } else {
-                    formattedQuantity = String.valueOf(item.getQuantity());
-                }
-
-                String unit = item.getUnit() != null && !item.getUnit().trim().isEmpty()
-                        ? " " + item.getUnit().trim()
-                        : "";
-                quantityText = " (" + formattedQuantity + unit + ")";
-            }
-
-            messageBuilder.append(checkbox)
-                    .append(" ")
-                    .append(item.getName())
-                    .append(quantityText)
-                    .append("\n");
-        }
-
-        // Add a signature
-        messageBuilder.append("\nSent from MealMate");
-
-        String message = messageBuilder.toString();
+        List<GroceryItem> items = resource.data;
+        String message = formatGroceryListForSharing(items);
 
         // Create SMS intent
-        Uri smsUri = Uri.parse("smsto:");
-        Intent intent = new Intent(Intent.ACTION_SENDTO, smsUri);
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("smsto:")); // Use "smsto:" without a number to let the user choose
         intent.putExtra("sms_body", message);
 
         try {
@@ -238,6 +206,76 @@ public class GroceryListFragment extends Fragment implements GroceryItemAdapter.
         } catch (Exception e) {
             Toast.makeText(getContext(), "No SMS app found", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Formats the grocery list into a clean, readable text format for sharing
+     */
+    private String formatGroceryListForSharing(List<GroceryItem> items) {
+        StringBuilder messageBuilder = new StringBuilder();
+
+        // Header with summary
+        long purchasedItems = items.stream().filter(GroceryItem::isPurchased).count();
+        messageBuilder.append("🛒 GROCERY LIST\n");
+        messageBuilder.append("═══════════════\n");
+        messageBuilder.append("Items: ").append(items.size());
+        messageBuilder.append(" | Done: ").append(purchasedItems).append("\n\n");
+
+        // Separate items into categories for better organization
+        List<GroceryItem> pendingItems = items.stream()
+                .filter(item -> !item.isPurchased())
+                .collect(java.util.stream.Collectors.toList());
+
+        List<GroceryItem> completedItems = items.stream()
+                .filter(GroceryItem::isPurchased)
+                .collect(java.util.stream.Collectors.toList());
+
+        // Pending items first (most important)
+        if (!pendingItems.isEmpty()) {
+            messageBuilder.append("📋 TO BUY:\n");
+            for (GroceryItem item : pendingItems) {
+                messageBuilder.append("☐ ").append(formatItemText(item)).append("\n");
+            }
+        }
+
+        // Completed items (if any)
+        if (!completedItems.isEmpty()) {
+            messageBuilder.append("\n✅ COMPLETED:\n");
+            for (GroceryItem item : completedItems) {
+                messageBuilder.append("☑ ").append(formatItemText(item)).append("\n");
+            }
+        }
+
+        // Footer
+        messageBuilder.append("\n📱 Sent from MealMate");
+
+        return messageBuilder.toString();
+    }
+
+    /**
+     * Formats individual item text with quantity and unit
+     */
+    private String formatItemText(GroceryItem item) {
+        StringBuilder itemText = new StringBuilder();
+        itemText.append(item.getName());
+
+        // Format quantity and unit
+        if (item.getQuantity() > 0) {
+            String formattedQuantity;
+            // If the quantity is a whole number, display without decimal
+            if (item.getQuantity() == Math.floor(item.getQuantity())) {
+                formattedQuantity = String.valueOf((int) item.getQuantity());
+            } else {
+                formattedQuantity = String.valueOf(item.getQuantity());
+            }
+
+            String unit = item.getUnit() != null && !item.getUnit().trim().isEmpty()
+                    ? " " + item.getUnit().trim()
+                    : "";
+            itemText.append(" (").append(formattedQuantity).append(unit).append(")");
+        }
+
+        return itemText.toString();
     }
 
     @Override
