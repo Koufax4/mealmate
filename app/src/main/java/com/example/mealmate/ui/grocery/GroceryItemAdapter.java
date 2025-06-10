@@ -89,14 +89,6 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
             String quantityText = formatQuantity(item.getQuantity(), item.getUnit());
             binding.textItemQuantity.setText(quantityText);
 
-            // Set category if available
-            if (item.getCategory() != null && !item.getCategory().trim().isEmpty()) {
-                binding.textItemCategory.setText(item.getCategory());
-                binding.textItemCategory.setVisibility(android.view.View.VISIBLE);
-            } else {
-                binding.textItemCategory.setVisibility(android.view.View.GONE);
-            }
-
             // Set purchased status without triggering listener
             binding.checkboxPurchased.setOnCheckedChangeListener(null);
             binding.checkboxPurchased.setChecked(item.isPurchased());
@@ -133,7 +125,6 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
 
                 binding.textItemName.setAlpha(0.6f);
                 binding.textItemQuantity.setAlpha(0.6f);
-                binding.textItemCategory.setAlpha(0.6f);
             } else {
                 // Remove strikethrough and restore normal appearance
                 binding.textItemName.setPaintFlags(
@@ -143,7 +134,6 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
 
                 binding.textItemName.setAlpha(1.0f);
                 binding.textItemQuantity.setAlpha(1.0f);
-                binding.textItemCategory.setAlpha(1.0f);
             }
         }
 

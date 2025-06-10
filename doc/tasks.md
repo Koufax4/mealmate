@@ -142,32 +142,32 @@
 
 **NEW IMPLEMENTATION - Advanced Store Discovery:**
 
-- [x] **Dependencies and Setup:**
-  - [x] Add Google Maps SDK dependency (`play-services-maps:18.2.0`)
-  - [x] Add Google Places SDK dependency (`places:3.4.0`)
-  - [x] Add Location Services dependency (`play-services-location:21.2.0`)
-  - [x] Add `ACCESS_FINE_LOCATION` permission to AndroidManifest.xml
-  - [x] Add Google Maps API key placeholder to AndroidManifest.xml
-- [x] **Full-Screen Map UI:**
-  - [x] Create `fragment_map.xml` with custom header and SupportMapFragment
-  - [x] Create `ic_refresh_24.xml` drawable for refresh functionality
-  - [x] Implement loading states and user feedback
-- [x] **MapFragment Implementation:**
-  - [x] Create `MapFragment.java` implementing OnMapReadyCallback
-  - [x] Initialize Places SDK and location services
-  - [x] Handle location permissions with ActivityResultLauncher
-  - [x] Integrate with FusedLocationProviderClient for user location
-  - [x] Implement Google Places API integration for store discovery
-  - [x] Filter results for grocery stores and supermarkets only
-  - [x] Display stores as map markers with names and addresses
-  - [x] Add refresh functionality to reload nearby stores
-- [x] **Navigation Integration:**
-  - [x] Add MapFragment destination to `mobile_navigation.xml`
-  - [x] Create navigation action from HomeFragment to MapFragment
-  - [x] Update HomeFragment Store Locations card click handler
-- [x] **Advanced Features:**
-  - [x] Real-time store discovery using Google Places API
-  - [x] Automatic filtering for grocery/supermarket types
-  - [x] User location centering with appropriate zoom level
-  - [x] Comprehensive error handling and user feedback
-  - [x] Permission-based flow with graceful degradation
+- [] **Dependencies and Setup:**
+  - [] Add Google Maps SDK dependency (`play-services-maps:18.2.0`)
+  - [] Add Google Places SDK dependency (`places:3.4.0`)
+  - [] Add Location Services dependency (`play-services-location:21.2.0`)
+  - [] Add `ACCESS_FINE_LOCATION` permission to AndroidManifest.xml
+  - [] Add Google Maps API key placeholder to AndroidManifest.xml
+- [] **Full-Screen Map UI:**
+  - [] Create `fragment_map.xml` with custom header and SupportMapFragment
+  - [] Create `ic_refresh_24.xml` drawable for refresh functionality
+  - [] Implement loading states and user feedback
+- [] **MapFragment Implementation:**
+  - [] Create `MapFragment.java` implementing OnMapReadyCallback
+  - [] Initialize Places SDK and location services
+  - [] Handle location permissions with ActivityResultLauncher
+  - [] Integrate with FusedLocationProviderClient for user location
+  - [] Implement Google Places API integration for store discovery
+  - [] Filter results for grocery stores and supermarkets only
+  - [] Display stores as map markers with names and addresses
+  - [] Add refresh functionality to reload nearby stores
+- [] **Navigation Integration:**
+  - [] Add MapFragment destination to `mobile_navigation.xml`
+  - [] Create navigation action from HomeFragment to MapFragment
+  - [] Update HomeFragment Store Locations card click handler
+- [] **Advanced Features:**
+  - [] Real-time store discovery using Google Places API
+  - [] Automatic filtering for grocery/supermarket types
+  - [] User location centering with appropriate zoom level
+  - [] Comprehensive error handling and user feedback
+  - [] Permission-based flow with graceful degradation

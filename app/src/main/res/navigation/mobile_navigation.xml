@@ -60,6 +60,9 @@
         <action
             android:id="@+id/action_navigation_home_to_groceryListFragment"
             app:destination="@id/groceryListFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
         <!-- Map navigation action - COMMENTED OUT -->
         <!-- <action
             android:id="@+id/action_navigation_home_to_mapFragment"
@@ -129,6 +132,19 @@
         android:name="com.example.mealmate.ui.grocery.GroceryListFragment"
         android:label="Grocery List"
         tools:layout="@layout/fragment_grocery_list" />
+
+    <!-- Profile Fragment -->
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.mealmate.ui.profile.ProfileFragment"
+        android:label="My Profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_loginFragment"
+            app:destination="@id/navigation_login"
+            app:popUpTo="@id/mobile_navigation"
+            app:popUpToInclusive="true" />
+    </fragment>
 
     <!-- Map Fragment - COMMENTED OUT -->
     <!-- <fragment

@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/mealmate/ui/home/HomeFragment.java
 package com.example.mealmate.ui.home;
 
 import android.os.Bundle;
@@ -7,70 +6,86 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.bumptech.glide.Glide;
 import com.example.mealmate.R;
 import com.example.mealmate.databinding.FragmentHomeBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Calendar;
 
-/**
- * HomeFragment displays the main landing screen after user login.
- * Features a modern design with glassmorphism hero card, navigation grid,
- * dynamic greeting, and quick stats dashboard with fixed header.
- */
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-            ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        return binding.getRoot();
+    }
 
-        // Initialize the modern UI components
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         setupModernHeader();
         setupDynamicGreeting();
         setupNavigationCards();
-
-        return root;
     }
 
-    /**
-     * Sets up the modern innovative header with profile and actions
-     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUserInfo();
+    }
+
+    private void updateUserInfo() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null && binding != null) {
+            // **FIX: Clear any existing tint before loading a new image**
+            binding.imageProfile.clearColorFilter();
+            binding.imageProfile.setImageTintList(null);
+
+            if (currentUser.getPhotoUrl() != null) {
+                Glide.with(this)
+                        .load(currentUser.getPhotoUrl())
+                        .circleCrop()
+                        .placeholder(R.drawable.ic_profile)
+                        .error(R.drawable.ic_profile)
+                        .into(binding.imageProfile);
+            } else {
+                Glide.with(this)
+                        .load(R.drawable.ic_profile)
+                        .circleCrop()
+                        .into(binding.imageProfile);
+            }
+
+            if (currentUser.getDisplayName() != null && !currentUser.getDisplayName().isEmpty()) {
+                binding.textUserName.setText(currentUser.getDisplayName() + " 👨‍🍳");
+            } else if (currentUser.getEmail() != null) {
+                binding.textUserName.setText(currentUser.getEmail().split("@")[0] + " 👨‍🍳");
+            } else {
+                binding.textUserName.setText("Chef! 👨‍🍳");
+            }
+        }
+    }
+
     private void setupModernHeader() {
-        // Search button click handler
-        binding.buttonSearch.setOnClickListener(v -> {
-            // TODO: Implement search functionality
-            // Could open a search dialog or navigate to search screen
-        });
+        updateUserInfo();
 
-        // Notifications button click handler
-        binding.buttonNotifications.setOnClickListener(v -> {
-            // TODO: Implement notifications functionality
-            // Could show notification panel or navigate to notifications screen
-        });
+        binding.buttonSettings.setOnClickListener(v ->
+                NavHostFragment.findNavController(HomeFragment.this)
+                        .navigate(R.id.action_homeFragment_to_profileFragment));
 
-        // Profile avatar click handler
-        binding.imageProfile.setOnClickListener(v -> {
-            // TODO: Navigate to profile screen
-            // NavHostFragment.findNavController(HomeFragment.this)
-            // .navigate(R.id.navigation_profile);
-        });
-
-        // Optional: Show notification badge if there are notifications
-        // binding.notificationBadge.setVisibility(View.VISIBLE);
+        binding.imageProfile.setOnClickListener(v ->
+                NavHostFragment.findNavController(HomeFragment.this)
+                        .navigate(R.id.action_homeFragment_to_profileFragment));
     }
 
-    /**
-     * Sets up dynamic greeting based on time of day in hero section
-     */
     private void setupDynamicGreeting() {
         Calendar calendar = Calendar.getInstance();
         int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
@@ -95,35 +110,21 @@ public class HomeFragment extends Fragment {
         binding.textHeroTitle.setText(greeting + "! " + emoji);
     }
 
-    /**
-     * Sets up navigation cards with click listeners
-     */
     private void setupNavigationCards() {
-        // My Recipes Card
-        binding.cardMyRecipes.setOnClickListener(v -> {
-            NavHostFragment.findNavController(HomeFragment.this)
-                    .navigate(R.id.action_navigation_home_to_recipeListFragment);
-        });
+        binding.cardMyRecipes.setOnClickListener(v ->
+                NavHostFragment.findNavController(HomeFragment.this)
+                        .navigate(R.id.action_navigation_home_to_recipeListFragment));
 
-        // Meal Planner Card
-        binding.cardMealPlanner.setOnClickListener(v -> {
-            NavHostFragment.findNavController(HomeFragment.this)
-                    .navigate(R.id.action_navigation_home_to_mealPlanFragment);
-        });
+        binding.cardMealPlanner.setOnClickListener(v ->
+                NavHostFragment.findNavController(HomeFragment.this)
+                        .navigate(R.id.action_navigation_home_to_mealPlanFragment));
 
-        // Grocery Lists Card
-        binding.cardGroceryLists.setOnClickListener(v -> {
-            NavHostFragment.findNavController(HomeFragment.this)
-                    .navigate(R.id.action_navigation_home_to_groceryListFragment);
-        });
+        binding.cardGroceryLists.setOnClickListener(v ->
+                NavHostFragment.findNavController(HomeFragment.this)
+                        .navigate(R.id.action_navigation_home_to_groceryListFragment));
 
-        // Store Locations Card - MAP FEATURE COMMENTED OUT
-        binding.cardStoreLocations.setOnClickListener(v -> {
-            // TODO: Re-enable when map feature is ready
-            // NavHostFragment.findNavController(HomeFragment.this)
-            // .navigate(R.id.action_navigation_home_to_mapFragment);
-            Toast.makeText(getContext(), "Store Locations feature coming soon!", Toast.LENGTH_SHORT).show();
-        });
+        binding.cardStoreLocations.setOnClickListener(v ->
+                Toast.makeText(getContext(), "Store Locations feature coming soon!", Toast.LENGTH_SHORT).show());
     }
 
     @Override

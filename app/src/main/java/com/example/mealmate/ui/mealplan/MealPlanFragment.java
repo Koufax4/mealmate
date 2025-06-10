@@ -44,7 +44,6 @@ public class MealPlanFragment extends Fragment {
 
     private FragmentMealPlanBinding binding;
     private MealPlanViewModel mealPlanViewModel;
-    private WeekDayAdapter weekDayAdapter;
     private final List<View> weekDayViews = new ArrayList<>();
 
     private Map<String, LinearLayout> dayLayouts;
