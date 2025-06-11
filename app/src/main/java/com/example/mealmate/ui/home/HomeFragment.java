@@ -13,6 +13,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
 import com.example.mealmate.R;
+import com.example.mealmate.data.model.AuthResource;
 import com.example.mealmate.databinding.FragmentHomeBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,6 +23,7 @@ import java.util.Calendar;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
+    private HomeViewModel homeViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,15 +34,19 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+
         setupModernHeader();
         setupDynamicGreeting();
         setupNavigationCards();
+        setupObservers();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         updateUserInfo();
+        homeViewModel.loadDashboardData();
     }
 
     private void updateUserInfo() {
@@ -125,6 +131,32 @@ public class HomeFragment extends Fragment {
 
         binding.cardStoreLocations.setOnClickListener(v ->
                 Toast.makeText(getContext(), "Store Locations feature coming soon!", Toast.LENGTH_SHORT).show());
+    }
+
+    private void setupObservers() {
+        homeViewModel.getRecipesLiveData().observe(getViewLifecycleOwner(), resource -> {
+            if (resource != null && resource.status == AuthResource.Status.SUCCESS && resource.data != null) {
+                binding.textRecipeCountStats.setText(String.valueOf(resource.data.size()));
+            } else {
+                binding.textRecipeCountStats.setText("0");
+            }
+        });
+
+        homeViewModel.getMealPlansLiveData().observe(getViewLifecycleOwner(), resource -> {
+            if (resource != null && resource.status == AuthResource.Status.SUCCESS && resource.data != null) {
+                binding.textMealPlanCountStats.setText(String.valueOf(resource.data.size()));
+            } else {
+                binding.textMealPlanCountStats.setText("0");
+            }
+        });
+
+        homeViewModel.getUnpurchasedItemsCount().observe(getViewLifecycleOwner(), resource -> {
+            if (resource != null && resource.status == AuthResource.Status.SUCCESS && resource.data != null) {
+                binding.textGroceryListCountStats.setText(String.valueOf(resource.data));
+            } else {
+                binding.textGroceryListCountStats.setText("0");
+            }
+        });
     }
 
     @Override

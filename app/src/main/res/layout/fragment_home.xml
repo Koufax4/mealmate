@@ -265,9 +265,10 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/textRecipeCountStats"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="12"
+                                android:text="-"
                                 android:textColor="@color/purple_700"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -296,9 +297,10 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/textMealPlanCountStats"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="3"
+                                android:text="-"
                                 android:textColor="@color/teal_700"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -327,9 +329,10 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/textGroceryListCountStats"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="5"
+                                android:text="-"
                                 android:textColor="@color/orange_500"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -338,7 +341,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:alpha="0.8"
-                                android:text="Grocery Lists"
+                                android:text="Groceries"
                                 android:textColor="@color/orange_900"
                                 android:textSize="12sp" />
 
@@ -451,7 +454,7 @@
                                 android:layout_height="48dp"
                                 android:layout_marginBottom="12dp"
                                 android:contentDescription="My Recipes"
-                                android:src="@drawable/ic_recipe"
+                                android:src="@drawable/ic_restaurant_24"
                                 app:tint="@color/purple_900" />
 
                             <TextView

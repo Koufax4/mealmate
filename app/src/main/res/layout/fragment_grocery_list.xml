@@ -5,211 +5,217 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:fitsSystemWindows="true">
+    android:background="@color/white"
+    tools:context=".ui.grocery.GroceryListFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:fitsSystemWindows="true"
+        app:elevation="4dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:paddingHorizontal="8dp">
+
+            <ImageButton
+                android:id="@+id/buttonBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_arrow_back_24"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="@color/purple_700"
+                android:contentDescription="Back"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:id="@+id/textViewHeaderTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Grocery List"
+                android:textColor="@color/purple_700"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_toEndOf="@id/buttonBack"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"/>
+        </RelativeLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/gray_100"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <!-- CUSTOM HEADER -->
-            <RelativeLayout
+            <!-- Loading State -->
+            <LinearLayout
+                android:id="@+id/layoutLoading"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:paddingHorizontal="8dp"
-                android:background="@color/white"
-                android:elevation="4dp">
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="32dp"
+                android:visibility="gone">
 
-                <ImageButton
-                    android:id="@+id/buttonBack"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/ic_arrow_back_24"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    app:tint="@color/purple_700"
-                    android:contentDescription="Back"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentStart="true"/>
-
-                <TextView
-                    android:id="@+id/textViewHeaderTitle"
+                <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Grocery List"
-                    android:textColor="@color/purple_700"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:layout_toEndOf="@id/buttonBack"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="8dp"/>
+                    android:indeterminate="true" />
 
-                <ImageButton
-                    android:id="@+id/buttonShare"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/ic_share_24"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    app:tint="@color/purple_700"
-                    android:contentDescription="Share grocery list"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"/>
-            </RelativeLayout>
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Loading your list..."
+                    android:textAppearance="?attr/textAppearanceBody1" />
+            </LinearLayout>
 
-            <!-- Content Container -->
+            <!-- Empty State -->
             <LinearLayout
+                android:id="@+id/layoutEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="48dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_shopping_cart_24"
+                    app:tint="@color/purple_200"
+                    android:layout_marginBottom="24dp"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Your Grocery List is Empty"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_marginBottom="8dp"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Add ingredients from your favorite recipes to get started."
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="?attr/colorOnSurfaceVariant" />
+            </LinearLayout>
+
+            <!-- Content -->
+            <LinearLayout
+                android:id="@+id/layoutContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:visibility="gone">
 
-                <!-- Loading State -->
-                <LinearLayout
-                    android:id="@+id/layoutLoading"
+                <!-- Summary Card -->
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="32dp"
-                    android:visibility="gone">
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
 
-                    <com.google.android.material.progressindicator.CircularProgressIndicator
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:indeterminate="true" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Generating grocery list..."
-                        android:textAppearance="?attr/textAppearanceBody1" />
-
-                </LinearLayout>
-
-                <!-- Empty State -->
-                <LinearLayout
-                    android:id="@+id/layoutEmpty"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="32dp"
-                    android:visibility="gone">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableTop="@drawable/ic_shopping_cart_24"
-                        android:drawablePadding="16dp"
-                        android:gravity="center"
-                        android:text="No items in your grocery list"
-                        android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:textColor="?attr/colorOnSurfaceVariant" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center"
-                        android:text="Add ingredients from recipes to start building your grocery list"
-                        android:textAppearance="?attr/textAppearanceBody2"
-                        android:textColor="?attr/colorOnSurfaceVariant" />
-
-                </LinearLayout>
-
-                <!-- Content -->
-                <LinearLayout
-                    android:id="@+id/layoutContent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <!-- Summary Card -->
-                    <com.google.android.material.card.MaterialCardView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="2dp">
+                        android:orientation="horizontal"
+                        android:padding="16dp">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="16dp">
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                            <LinearLayout
-                                android:layout_width="0dp"
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/textTotalItems"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
+                                android:textAppearance="?attr/textAppearanceHeadline5"
+                                android:textColor="?attr/colorPrimary"
+                                tools:text="12" />
 
-                                <com.google.android.material.textview.MaterialTextView
-                                    android:id="@+id/textTotalItems"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textAppearance="?attr/textAppearanceHeadline5"
-                                    android:textColor="?attr/colorPrimary"
-                                    tools:text="12" />
-
-                                <com.google.android.material.textview.MaterialTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Total Items"
-                                    android:textAppearance="?attr/textAppearanceBody2"
-                                    android:textColor="?attr/colorOnSurfaceVariant" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
+                            <com.google.android.material.textview.MaterialTextView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <com.google.android.material.textview.MaterialTextView
-                                    android:id="@+id/textPurchasedItems"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textAppearance="?attr/textAppearanceHeadline5"
-                                    android:textColor="?attr/colorSecondary"
-                                    tools:text="5" />
-
-                                <com.google.android.material.textview.MaterialTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Purchased"
-                                    android:textAppearance="?attr/textAppearanceBody2"
-                                    android:textColor="?attr/colorOnSurfaceVariant" />
-
-                            </LinearLayout>
-
+                                android:text="Total Items"
+                                android:textAppearance="?attr/textAppearanceBody2"
+                                android:textColor="?attr/colorOnSurfaceVariant" />
                         </LinearLayout>
 
-                    </com.google.android.material.card.MaterialCardView>
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/gray_200" />
 
-                    <!-- Grocery Items RecyclerView -->
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerViewGroceryItems"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:nestedScrollingEnabled="false"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:itemCount="5"
-                        tools:listitem="@layout/item_grocery" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                </LinearLayout>
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/textPurchasedItems"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?attr/textAppearanceHeadline5"
+                                android:textColor="?attr/colorSecondary"
+                                tools:text="5" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Purchased"
+                                android:textAppearance="?attr/textAppearanceBody2"
+                                android:textColor="?attr/colorOnSurfaceVariant" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Grocery Items RecyclerView -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewGroceryItems"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingBottom="80dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="5"
+                    tools:listitem="@layout/item_grocery" />
 
             </LinearLayout>
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="Share Grocery List"
+        app:srcCompat="@drawable/ic_share_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

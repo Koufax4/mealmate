@@ -32,7 +32,7 @@ public class GroceryListFragment extends Fragment implements GroceryItemAdapter.
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         binding = FragmentGroceryListBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -60,7 +60,7 @@ public class GroceryListFragment extends Fragment implements GroceryItemAdapter.
 
     private void setupClickListeners() {
         binding.buttonBack.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
-        binding.buttonShare.setOnClickListener(v -> shareGroceryList());
+        binding.fabShare.setOnClickListener(v -> shareGroceryList());
     }
 
     private void observeViewModel() {

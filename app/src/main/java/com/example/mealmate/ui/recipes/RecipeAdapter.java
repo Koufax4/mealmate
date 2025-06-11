@@ -1,3 +1,4 @@
+// app/src/main/java/com/example/mealmate/ui/recipes/RecipeAdapter.java
 package com.example.mealmate.ui.recipes;
 
 import android.view.LayoutInflater;
@@ -97,6 +98,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         private final TextView textViewServings;
         private final TextView textViewCategory;
         private final MaterialButton buttonMenuMore;
+        private final View prepTimeSeparator, cookTimeSeparator, servingsSeparator;
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -108,6 +110,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             textViewServings = itemView.findViewById(R.id.textViewServings);
             textViewCategory = itemView.findViewById(R.id.textViewCategory);
             buttonMenuMore = itemView.findViewById(R.id.buttonMenuMore);
+            prepTimeSeparator = itemView.findViewById(R.id.prepTimeSeparator);
+            cookTimeSeparator = itemView.findViewById(R.id.cookTimeSeparator);
+            servingsSeparator = itemView.findViewById(R.id.servingsSeparator);
+
 
             // Set up click listeners
             itemView.setOnClickListener(v -> {
@@ -133,24 +139,29 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             // Set recipe name
             textViewRecipeName.setText(recipe.getName());
 
-            // Set ingredients count
+            // Set ingredients count (number only)
             int ingredientCount = recipe.getIngredients() != null ? recipe.getIngredients().size() : 0;
-            String ingredientText = ingredientCount == 1 ? "1 ingredient" : ingredientCount + " ingredients";
-            textViewIngredientsCount.setText(ingredientText);
+            textViewIngredientsCount.setText(String.valueOf(ingredientCount));
 
-            // Set optional fields with visibility management
-            setOptionalField(textViewPrepTime, recipe.getPrepTime());
-            setOptionalField(textViewCookTime, recipe.getCookTime());
+            // Set optional fields and their separators
+            boolean prepTimeVisible = setNumericField(textViewPrepTime, recipe.getPrepTime());
+            prepTimeSeparator.setVisibility(prepTimeVisible ? View.VISIBLE : View.GONE);
 
+            boolean cookTimeVisible = setNumericField(textViewCookTime, recipe.getCookTime());
+            cookTimeSeparator.setVisibility(cookTimeVisible ? View.VISIBLE : View.GONE);
+
+            boolean servingsVisible = false;
             if (recipe.getServings() > 0) {
-                String servingText = recipe.getServings() == 1 ? "1 serving" : recipe.getServings() + " servings";
-                textViewServings.setText(servingText);
+                textViewServings.setText(String.valueOf(recipe.getServings()));
                 textViewServings.setVisibility(View.VISIBLE);
+                servingsVisible = true;
             } else {
                 textViewServings.setVisibility(View.GONE);
             }
+            servingsSeparator.setVisibility(servingsVisible ? View.VISIBLE : View.GONE);
 
-            setOptionalField(textViewCategory, recipe.getCategory());
+            // Set optional text field (category)
+            setOptionalTextField(textViewCategory, recipe.getCategory());
 
             // Load recipe image
             if (recipe.getImageUrl() != null && !recipe.getImageUrl().isEmpty()) {
@@ -165,12 +176,30 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             }
         }
 
-        private void setOptionalField(TextView textView, String value) {
+        private void setOptionalTextField(TextView textView, String value) {
             if (value != null && !value.trim().isEmpty()) {
                 textView.setText(value);
                 textView.setVisibility(View.VISIBLE);
             } else {
                 textView.setVisibility(View.GONE);
+            }
+        }
+
+        private boolean setNumericField(TextView textView, String value) {
+            if (value != null && !value.trim().isEmpty()) {
+                // Replaces all non-digit characters with an empty string
+                String numberOnly = value.replaceAll("\\D+", "");
+                if (!numberOnly.isEmpty()) {
+                    textView.setText(numberOnly);
+                    textView.setVisibility(View.VISIBLE);
+                    return true;
+                } else {
+                    textView.setVisibility(View.GONE);
+                    return false;
+                }
+            } else {
+                textView.setVisibility(View.GONE);
+                return false;
             }
         }
     }

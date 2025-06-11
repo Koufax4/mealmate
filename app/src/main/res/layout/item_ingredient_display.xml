@@ -4,17 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp"
+    android:paddingVertical="8dp"
     android:gravity="center_vertical">
 
-    <!-- Bullet Point -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="•"
-        android:textSize="16sp"
-        android:textColor="@color/purple_700"
-        android:layout_marginEnd="8dp" />
+    <!-- Styled Bullet Point -->
+    <View
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:background="@drawable/day_selected_background"
+        android:layout_marginEnd="12dp" />
 
     <!-- Ingredient Text -->
     <TextView
@@ -22,9 +20,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="2 cups flour"
         android:textSize="16sp"
         android:textColor="@color/black"
+        android:lineSpacingExtra="4dp"
         tools:text="2 cups all-purpose flour" />
 
-</LinearLayout> 
+</LinearLayout>

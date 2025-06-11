@@ -1,40 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
-    app:cardBackgroundColor="@color/teal_100"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="2dp"
+    android:background="@drawable/bg_recipe_item_meal_plan"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:minHeight="60dp"
+    android:orientation="horizontal"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="8dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="16dp">
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="12dp"
+        android:contentDescription="Recipe Icon"
+        android:src="@drawable/ic_restaurant_24"
+        app:tint="@color/teal_700" />
 
-        <TextView
-            android:id="@+id/text_recipe_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Recipe Name"
-            android:textSize="14sp"
-            android:textColor="@color/teal_900" />
+    <TextView
+        android:id="@+id/text_recipe_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/teal_900"
+        android:textSize="16sp"
+        tools:text="Delicious Pasta Carbonara" />
 
-        <ImageButton
-            android:id="@+id/button_remove_meal"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_close_24"
-            android:background="@drawable/remove_button_background"
-            android:contentDescription="Remove Recipe"
-            app:tint="@color/white" />
-    </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+    <ImageButton
+        android:id="@+id/button_remove_meal"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Remove Recipe"
+        android:src="@drawable/ic_close_24"
+        app:tint="@color/red_600" />
+
+</LinearLayout>

@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,23 +13,20 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.mealmate.R;
-import com.example.mealmate.data.model.AuthResource;
 import com.example.mealmate.data.model.Recipe;
+import com.example.mealmate.databinding.FragmentRecipeDetailBinding;
 import com.example.mealmate.ui.grocery.GroceryViewModel;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import android.widget.ImageButton;
 
 /**
  * Fragment for displaying detailed recipe information.
  */
 public class RecipeDetailFragment extends Fragment {
 
+    private FragmentRecipeDetailBinding binding;
     private RecipeViewModel recipeViewModel;
     private GroceryViewModel groceryViewModel;
     private IngredientDisplayAdapter ingredientDisplayAdapter;
@@ -42,23 +37,6 @@ public class RecipeDetailFragment extends Fragment {
 
     // Current recipe data
     private Recipe currentRecipe;
-
-    // UI Components
-    private ImageView imageViewRecipe;
-    private TextView textViewRecipeName;
-    private TextView textViewPrepTime;
-    private TextView textViewCookTime;
-    private TextView textViewServings;
-    private TextView textViewCategory;
-    private RecyclerView recyclerViewIngredients;
-    private TextView textViewInstructions;
-    private LinearLayout layoutLoading;
-    private LinearLayout layoutError;
-    private TextView textViewErrorMessage;
-    private MaterialButton buttonRetry;
-    private ImageButton buttonBack;
-    private TextView textViewHeaderTitle;
-    private FloatingActionButton fabAddToGroceryList;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,15 +55,15 @@ public class RecipeDetailFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_recipe_detail, container, false);
+                             @Nullable Bundle savedInstanceState) {
+        binding = FragmentRecipeDetailBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initializeViews(view);
         setupRecyclerView();
         setupClickListeners();
         observeViewModel();
@@ -98,35 +76,16 @@ public class RecipeDetailFragment extends Fragment {
         }
     }
 
-    private void initializeViews(View view) {
-        imageViewRecipe = view.findViewById(R.id.imageViewRecipe);
-        textViewRecipeName = view.findViewById(R.id.textViewRecipeName);
-        textViewPrepTime = view.findViewById(R.id.textViewPrepTime);
-        textViewCookTime = view.findViewById(R.id.textViewCookTime);
-        textViewServings = view.findViewById(R.id.textViewServings);
-        textViewCategory = view.findViewById(R.id.textViewCategory);
-        recyclerViewIngredients = view.findViewById(R.id.recyclerViewIngredients);
-        textViewInstructions = view.findViewById(R.id.textViewInstructions);
-        layoutLoading = view.findViewById(R.id.layoutLoading);
-        layoutError = view.findViewById(R.id.layoutError);
-        textViewErrorMessage = view.findViewById(R.id.textViewErrorMessage);
-        buttonRetry = view.findViewById(R.id.buttonRetry);
-        buttonBack = view.findViewById(R.id.buttonBack);
-        textViewHeaderTitle = view.findViewById(R.id.textViewHeaderTitle);
-        imageViewRecipe = view.findViewById(R.id.imageViewRecipe);
-        fabAddToGroceryList = view.findViewById(R.id.fabAddToGroceryList);
-    }
-
     private void setupRecyclerView() {
         ingredientDisplayAdapter = new IngredientDisplayAdapter();
-        recyclerViewIngredients.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerViewIngredients.setAdapter(ingredientDisplayAdapter);
+        binding.recyclerViewIngredients.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerViewIngredients.setAdapter(ingredientDisplayAdapter);
     }
 
     private void setupClickListeners() {
-        buttonRetry.setOnClickListener(v -> loadRecipeDetail());
-        buttonBack.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
-        fabAddToGroceryList.setOnClickListener(v -> addToGroceryList());
+        binding.buttonRetry.setOnClickListener(v -> loadRecipeDetail());
+        binding.buttonBack.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
+        binding.fabAddToGroceryList.setOnClickListener(v -> addToGroceryList());
     }
 
     private void loadRecipeDetail() {
@@ -179,46 +138,28 @@ public class RecipeDetailFragment extends Fragment {
     }
 
     private void showLoadingState() {
-        layoutLoading.setVisibility(View.VISIBLE);
-        layoutError.setVisibility(View.GONE);
-        hideRecipeContent();
+        binding.layoutLoading.setVisibility(View.VISIBLE);
+        binding.layoutError.setVisibility(View.GONE);
     }
 
     private void showRecipeDetail(Recipe recipe) {
-        layoutLoading.setVisibility(View.GONE);
-        layoutError.setVisibility(View.GONE);
-        showRecipeContent();
+        binding.layoutLoading.setVisibility(View.GONE);
+        binding.layoutError.setVisibility(View.GONE);
 
         currentRecipe = recipe; // Store the recipe for adding to grocery list
         populateRecipeData(recipe);
     }
 
     private void showErrorState(String errorMessage) {
-        layoutLoading.setVisibility(View.GONE);
-        layoutError.setVisibility(View.VISIBLE);
-        hideRecipeContent();
-
-        textViewErrorMessage.setText(errorMessage != null ? errorMessage : "Unknown error occurred");
-    }
-
-    private void hideRecipeContent() {
-        imageViewRecipe.setVisibility(View.GONE);
-        textViewRecipeName.setVisibility(View.GONE);
-        recyclerViewIngredients.setVisibility(View.GONE);
-        textViewInstructions.setVisibility(View.GONE);
-    }
-
-    private void showRecipeContent() {
-        imageViewRecipe.setVisibility(View.VISIBLE);
-        textViewRecipeName.setVisibility(View.VISIBLE);
-        recyclerViewIngredients.setVisibility(View.VISIBLE);
-        textViewInstructions.setVisibility(View.VISIBLE);
+        binding.layoutLoading.setVisibility(View.GONE);
+        binding.layoutError.setVisibility(View.VISIBLE);
+        binding.textViewErrorMessage.setText(errorMessage != null ? errorMessage : "Unknown error occurred");
     }
 
     private void populateRecipeData(Recipe recipe) {
         // Set recipe name
-        textViewRecipeName.setText(recipe.getName());
-        textViewHeaderTitle.setText(recipe.getName());
+        binding.textViewRecipeName.setText(recipe.getName());
+        binding.textViewHeaderTitle.setText(recipe.getName());
 
         // Load recipe image
         if (recipe.getImageUrl() != null && !recipe.getImageUrl().isEmpty()) {
@@ -227,24 +168,30 @@ public class RecipeDetailFragment extends Fragment {
                     .placeholder(R.drawable.ic_recipe_placeholder_24)
                     .error(R.drawable.ic_recipe_placeholder_24)
                     .centerCrop()
-                    .into(imageViewRecipe);
+                    .into(binding.imageViewRecipe);
         } else {
-            imageViewRecipe.setImageResource(R.drawable.ic_recipe_placeholder_24);
+            binding.imageViewRecipe.setImageResource(R.drawable.ic_recipe_placeholder_24);
         }
 
-        // Set optional metadata
-        setOptionalField(textViewPrepTime, recipe.getPrepTime(), "Prep: ");
-        setOptionalField(textViewCookTime, recipe.getCookTime(), "Cook: ");
+        // Set optional metadata and separators
+        boolean prepTimeVisible = setOptionalField(binding.textViewPrepTime, recipe.getPrepTime(), "Prep: ");
+        boolean cookTimeVisible = setOptionalField(binding.textViewCookTime, recipe.getCookTime(), "Cook: ");
+        boolean servingsVisible;
 
         if (recipe.getServings() > 0) {
             String servingText = recipe.getServings() == 1 ? "1 serving" : recipe.getServings() + " servings";
-            textViewServings.setText(servingText);
-            textViewServings.setVisibility(View.VISIBLE);
+            binding.textViewServings.setText(servingText);
+            binding.textViewServings.setVisibility(View.VISIBLE);
+            servingsVisible = true;
         } else {
-            textViewServings.setVisibility(View.GONE);
+            binding.textViewServings.setVisibility(View.GONE);
+            servingsVisible = false;
         }
 
-        setOptionalField(textViewCategory, recipe.getCategory(), "");
+        binding.separator1.setVisibility(prepTimeVisible && (cookTimeVisible || servingsVisible) ? View.VISIBLE : View.GONE);
+        binding.separator2.setVisibility(cookTimeVisible && servingsVisible ? View.VISIBLE : View.GONE);
+
+        setOptionalField(binding.textViewCategory, recipe.getCategory(), "");
 
         // Set ingredients
         if (recipe.getIngredients() != null) {
@@ -253,18 +200,20 @@ public class RecipeDetailFragment extends Fragment {
 
         // Set instructions
         if (recipe.getInstructions() != null && !recipe.getInstructions().trim().isEmpty()) {
-            textViewInstructions.setText(recipe.getInstructions());
+            binding.textViewInstructions.setText(recipe.getInstructions());
         } else {
-            textViewInstructions.setText("No instructions provided.");
+            binding.textViewInstructions.setText("No instructions provided.");
         }
     }
 
-    private void setOptionalField(TextView textView, String value, String prefix) {
+    private boolean setOptionalField(TextView textView, String value, String prefix) {
         if (value != null && !value.trim().isEmpty()) {
             textView.setText(prefix + value);
             textView.setVisibility(View.VISIBLE);
+            return true;
         } else {
             textView.setVisibility(View.GONE);
+            return false;
         }
     }
 
@@ -300,5 +249,6 @@ public class RecipeDetailFragment extends Fragment {
         if (recipeViewModel != null) {
             recipeViewModel.clearRecipeDetail();
         }
+        binding = null;
     }
 }

@@ -2,12 +2,13 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
+    android:layout_marginBottom="16dp"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="16dp"
-    app:cardElevation="4dp">
+    app:cardElevation="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,56 +21,47 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="Day"
+            android:textAppearance="?attr/textAppearanceHeadline6"
             android:textColor="@color/purple_900"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            tools:text="Monday" />
 
         <LinearLayout
             android:id="@+id/layout_meals"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:orientation="vertical">
 
-            <!-- Add Recipe Button -->
-            <com.google.android.material.card.MaterialCardView
+            <!-- Recipe items will be programmatically added here -->
+
+            <!-- Add Recipe Button (Slot) -->
+            <LinearLayout
                 android:id="@+id/button_add_meal"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_add_recipe_slot"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                app:cardBackgroundColor="@color/gray_100"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/gray_300"
-                app:strokeWidth="1dp">
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="16dp">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_add"
+                    app:tint="?attr/colorPrimary" />
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginEnd="12dp"
-                        android:contentDescription="Add Recipe"
-                        android:src="@drawable/ic_add_24"
-                        app:tint="@color/gray_600" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Recipe"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="16sp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Add Recipe"
-                        android:textColor="@color/gray_600"
-                        android:textSize="14sp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

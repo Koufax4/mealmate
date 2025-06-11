@@ -7,10 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -21,15 +17,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mealmate.R;
-import com.example.mealmate.data.model.AuthResource;
 import com.example.mealmate.data.model.Ingredient;
 import com.example.mealmate.data.model.Recipe;
-import com.google.android.material.button.MaterialButton;
+import com.example.mealmate.databinding.FragmentAddRecipeBinding;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
@@ -39,24 +31,9 @@ import java.util.List;
  */
 public class AddRecipeFragment extends Fragment {
 
+    private FragmentAddRecipeBinding binding;
     private RecipeViewModel recipeViewModel;
     private IngredientAdapter ingredientAdapter;
-
-    // UI Components
-    private ImageButton buttonBack;
-    private ImageView imageViewRecipe;
-    private TextView textViewAddPhoto;
-    private TextInputEditText editTextRecipeName;
-    private RecyclerView recyclerViewIngredients;
-    private MaterialButton buttonAddIngredient;
-    private TextInputEditText editTextInstructions;
-    private TextInputEditText editTextPrepTime;
-    private TextInputEditText editTextCookTime;
-    private TextInputEditText editTextServings;
-    private TextInputEditText editTextCategory;
-    private MaterialButton buttonCancel;
-    private MaterialButton buttonSaveRecipe;
-    private ProgressBar progressBar;
 
     // Image selection launcher
     private ActivityResultLauncher<Intent> imagePickerLauncher;
@@ -76,8 +53,8 @@ public class AddRecipeFragment extends Fragment {
                         Uri imageUri = result.getData().getData();
                         if (imageUri != null) {
                             recipeViewModel.setSelectedImageUri(imageUri);
-                            imageViewRecipe.setImageURI(imageUri);
-                            textViewAddPhoto.setVisibility(View.GONE);
+                            binding.imageViewRecipe.setImageURI(imageUri);
+                            binding.textViewAddPhoto.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -86,41 +63,23 @@ public class AddRecipeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_add_recipe, container, false);
+                             @Nullable Bundle savedInstanceState) {
+        binding = FragmentAddRecipeBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        initializeViews(view);
         setupRecyclerView();
         setupClickListeners();
         observeViewModel();
     }
 
-    private void initializeViews(View view) {
-        buttonBack = view.findViewById(R.id.buttonBack);
-        imageViewRecipe = view.findViewById(R.id.imageViewRecipe);
-        textViewAddPhoto = view.findViewById(R.id.textViewAddPhoto);
-        editTextRecipeName = view.findViewById(R.id.editTextRecipeName);
-        recyclerViewIngredients = view.findViewById(R.id.recyclerViewIngredients);
-        buttonAddIngredient = view.findViewById(R.id.buttonAddIngredient);
-        editTextInstructions = view.findViewById(R.id.editTextInstructions);
-        editTextPrepTime = view.findViewById(R.id.editTextPrepTime);
-        editTextCookTime = view.findViewById(R.id.editTextCookTime);
-        editTextServings = view.findViewById(R.id.editTextServings);
-        editTextCategory = view.findViewById(R.id.editTextCategory);
-        buttonCancel = view.findViewById(R.id.buttonCancel);
-        buttonSaveRecipe = view.findViewById(R.id.buttonSaveRecipe);
-        progressBar = view.findViewById(R.id.progressBar);
-    }
-
     private void setupRecyclerView() {
         ingredientAdapter = new IngredientAdapter();
-        recyclerViewIngredients.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerViewIngredients.setAdapter(ingredientAdapter);
+        binding.recyclerViewIngredients.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerViewIngredients.setAdapter(ingredientAdapter);
 
         // Set up ingredient removal listener
         ingredientAdapter.setOnIngredientRemovedListener(position -> {
@@ -130,24 +89,24 @@ public class AddRecipeFragment extends Fragment {
     }
 
     private void setupClickListeners() {
-        buttonBack.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
+        binding.buttonBack.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
         // Image selection
-        imageViewRecipe.setOnClickListener(v -> openImagePicker());
-        textViewAddPhoto.setOnClickListener(v -> openImagePicker());
+        binding.imageViewRecipe.setOnClickListener(v -> openImagePicker());
+        binding.textViewAddPhoto.setOnClickListener(v -> openImagePicker());
 
         // Add ingredient
-        buttonAddIngredient.setOnClickListener(v -> {
+        binding.buttonAddIngredient.setOnClickListener(v -> {
             ingredientAdapter.addIngredient();
-            recyclerViewIngredients.scrollToPosition(ingredientAdapter.getItemCount() - 1);
+            binding.recyclerViewIngredients.scrollToPosition(ingredientAdapter.getItemCount() - 1);
         });
 
         // Cancel button
-        buttonCancel.setOnClickListener(v -> {
+        binding.buttonCancel.setOnClickListener(v -> {
             Navigation.findNavController(v).navigateUp();
         });
 
         // Save recipe
-        buttonSaveRecipe.setOnClickListener(v -> validateAndSaveRecipe());
+        binding.buttonSaveRecipe.setOnClickListener(v -> validateAndSaveRecipe());
     }
 
     private void openImagePicker() {
@@ -158,19 +117,19 @@ public class AddRecipeFragment extends Fragment {
     }
 
     private void validateAndSaveRecipe() {
-        String recipeName = editTextRecipeName.getText().toString().trim();
-        String instructions = editTextInstructions.getText().toString().trim();
+        String recipeName = binding.editTextRecipeName.getText().toString().trim();
+        String instructions = binding.editTextInstructions.getText().toString().trim();
 
         // Validate required fields
         if (recipeName.isEmpty()) {
-            editTextRecipeName.setError("Recipe name is required");
-            editTextRecipeName.requestFocus();
+            binding.editTextRecipeName.setError("Recipe name is required");
+            binding.editTextRecipeName.requestFocus();
             return;
         }
 
         if (instructions.isEmpty()) {
-            editTextInstructions.setError("Instructions are required");
-            editTextInstructions.requestFocus();
+            binding.editTextInstructions.setError("Instructions are required");
+            binding.editTextInstructions.requestFocus();
             return;
         }
 
@@ -188,17 +147,17 @@ public class AddRecipeFragment extends Fragment {
         recipe.setInstructions(instructions);
 
         // Set optional fields
-        String prepTime = editTextPrepTime.getText().toString().trim();
+        String prepTime = binding.editTextPrepTime.getText().toString().trim();
         if (!prepTime.isEmpty()) {
             recipe.setPrepTime(prepTime);
         }
 
-        String cookTime = editTextCookTime.getText().toString().trim();
+        String cookTime = binding.editTextCookTime.getText().toString().trim();
         if (!cookTime.isEmpty()) {
             recipe.setCookTime(cookTime);
         }
 
-        String servingsText = editTextServings.getText().toString().trim();
+        String servingsText = binding.editTextServings.getText().toString().trim();
         if (!servingsText.isEmpty()) {
             try {
                 int servings = Integer.parseInt(servingsText);
@@ -208,7 +167,7 @@ public class AddRecipeFragment extends Fragment {
             }
         }
 
-        String category = editTextCategory.getText().toString().trim();
+        String category = binding.editTextCategory.getText().toString().trim();
         if (!category.isEmpty()) {
             recipe.setCategory(category);
         }
@@ -242,11 +201,11 @@ public class AddRecipeFragment extends Fragment {
     }
 
     private void setLoading(boolean isLoading) {
-        progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
-        buttonSaveRecipe.setEnabled(!isLoading);
-        buttonCancel.setEnabled(!isLoading);
-        buttonAddIngredient.setEnabled(!isLoading);
-        imageViewRecipe.setEnabled(!isLoading);
+        binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+        binding.buttonSaveRecipe.setEnabled(!isLoading);
+        binding.buttonCancel.setEnabled(!isLoading);
+        binding.buttonAddIngredient.setEnabled(!isLoading);
+        binding.imageViewRecipe.setEnabled(!isLoading);
     }
 
     private void showMessage(String message) {
@@ -264,5 +223,6 @@ public class AddRecipeFragment extends Fragment {
         if (recipeViewModel != null) {
             recipeViewModel.clearSelectedImageUri();
         }
+        binding = null;
     }
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,9 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.mealmate.R;
-import com.example.mealmate.data.model.AuthResource;
 import com.example.mealmate.data.model.Recipe;
-import android.widget.ImageButton;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -59,7 +58,7 @@ public class RecipeListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_recipe_list, container, false);
     }
 
@@ -133,7 +132,7 @@ public class RecipeListFragment extends Fragment {
     }
 
     private void showRecipeMenu(Recipe recipe, View anchorView) {
-        PopupMenu popupMenu = new PopupMenu(getContext(), anchorView);
+        PopupMenu popupMenu = new PopupMenu(requireContext(), anchorView);
         popupMenu.getMenuInflater().inflate(R.menu.recipe_item_menu, popupMenu.getMenu());
 
         popupMenu.setOnMenuItemClickListener(item -> {
@@ -171,7 +170,9 @@ public class RecipeListFragment extends Fragment {
     private void observeViewModel() {
         // Observe recipes list
         recipeViewModel.getRecipesLiveData().observe(getViewLifecycleOwner(), resource -> {
-            swipeRefreshLayout.setRefreshing(false);
+            if (swipeRefreshLayout.isRefreshing()) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
 
             if (resource != null) {
                 switch (resource.status) {
@@ -230,6 +231,7 @@ public class RecipeListFragment extends Fragment {
         layoutEmptyState.setVisibility(View.GONE);
         layoutError.setVisibility(View.GONE);
         recyclerViewRecipes.setVisibility(View.GONE);
+        fabAddRecipe.setVisibility(View.GONE);
     }
 
     private void showRecipesState(List<Recipe> recipes) {
@@ -237,6 +239,7 @@ public class RecipeListFragment extends Fragment {
         layoutEmptyState.setVisibility(View.GONE);
         layoutError.setVisibility(View.GONE);
         recyclerViewRecipes.setVisibility(View.VISIBLE);
+        fabAddRecipe.setVisibility(View.VISIBLE);
 
         recipeAdapter.updateRecipes(recipes);
         updateRecipeCount(recipes.size());
@@ -247,6 +250,7 @@ public class RecipeListFragment extends Fragment {
         layoutEmptyState.setVisibility(View.VISIBLE);
         layoutError.setVisibility(View.GONE);
         recyclerViewRecipes.setVisibility(View.GONE);
+        fabAddRecipe.setVisibility(View.GONE);
 
         updateRecipeCount(0);
     }
@@ -256,13 +260,14 @@ public class RecipeListFragment extends Fragment {
         layoutEmptyState.setVisibility(View.GONE);
         layoutError.setVisibility(View.VISIBLE);
         recyclerViewRecipes.setVisibility(View.GONE);
+        fabAddRecipe.setVisibility(View.GONE);
 
         textViewErrorMessage.setText(errorMessage != null ? errorMessage : "Unknown error occurred");
         updateRecipeCount(0);
     }
 
     private void updateRecipeCount(int count) {
-        String countText = count == 1 ? "1 recipe" : count + " recipes";
+        String countText = getResources().getQuantityString(R.plurals.recipe_count_plural, count, count);
         textViewRecipeCount.setText(countText);
     }
 

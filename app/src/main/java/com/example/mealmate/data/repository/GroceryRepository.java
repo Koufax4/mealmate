@@ -142,7 +142,7 @@ public class GroceryRepository {
      * @param resultLiveData LiveData to notify about the operation result
      */
     public void saveGroceryList(String listId, List<GroceryItem> items,
-            MutableLiveData<AuthResource<Void>> resultLiveData) {
+                                MutableLiveData<AuthResource<Void>> resultLiveData) {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser == null) {
             resultLiveData.setValue(AuthResource.error("User not authenticated", null));
@@ -181,5 +181,37 @@ public class GroceryRepository {
             Log.e(TAG, "Failed to save grocery list", e);
             resultLiveData.setValue(AuthResource.error("Failed to save grocery list: " + e.getMessage(), null));
         });
+    }
+
+    /**
+     * Fetches the count of unpurchased grocery items in the main list.
+     * @param countLiveData LiveData to notify about the fetched count.
+     */
+    public void getUnpurchasedItemsCount(MutableLiveData<AuthResource<Integer>> countLiveData) {
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser == null) {
+            countLiveData.setValue(AuthResource.error("User not authenticated", null));
+            return;
+        }
+        countLiveData.setValue(AuthResource.loading(null));
+
+        firestore.collection("users")
+                .document(currentUser.getUid())
+                .collection("groceryLists")
+                .document("main_list") // Hardcoded main list ID
+                .collection("items")
+                .whereEqualTo("purchased", false)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots != null) {
+                        countLiveData.setValue(AuthResource.success(queryDocumentSnapshots.size()));
+                    } else {
+                        countLiveData.setValue(AuthResource.success(0));
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Failed to fetch unpurchased items count", e);
+                    countLiveData.setValue(AuthResource.error("Failed to fetch count: " + e.getMessage(), null));
+                });
     }
 }

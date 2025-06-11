@@ -1,169 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_100"
     android:fitsSystemWindows="true"
     tools:context=".ui.profile.ProfileFragment">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <!-- Header -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/white"
-            android:elevation="4dp"
-            android:paddingHorizontal="8dp">
-
-            <ImageButton
-                android:id="@+id/buttonBack"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Back"
-                android:src="@drawable/ic_arrow_back_24"
-                app:tint="@color/purple_700" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="8dp"
-                android:layout_toEndOf="@id/buttonBack"
-                android:text="My Profile"
-                android:textColor="@color/purple_700"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-        </RelativeLayout>
+        android:layout_height="match_parent"
+        android:background="@color/gray_100">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
-            <!-- Profile Picture Section -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="60dp"
-                app:cardElevation="4dp">
+            <!-- Header -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/white"
+                android:elevation="4dp"
+                android:paddingHorizontal="8dp">
 
-                <ImageView
-                    android:id="@+id/imageViewProfile"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="Profile Picture"
-                    android:scaleType="centerCrop"
-                    tools:src="@drawable/ic_profile" />
+                <ImageButton
+                    android:id="@+id/buttonBack"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Back"
+                    android:src="@drawable/ic_arrow_back_24"
+                    app:tint="@color/purple_700" />
 
-            </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_toEndOf="@id/buttonBack"
+                    android:text="My Profile"
+                    android:textColor="@color/purple_700"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/textViewChangePhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="24dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:text="Change Photo"
-                android:textColor="?attr/colorPrimary"
-                android:textStyle="bold" />
-
-            <!-- Display Name -->
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MealMate.TextInputLayout.OutlinedBox.Rounded"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Display Name">
+                android:orientation="vertical"
+                android:padding="16dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextDisplayName"
+                <!-- Profile Picture Section -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="60dp"
+                    app:cardElevation="4dp">
+
+                    <ImageView
+                        android:id="@+id/imageViewProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="Profile Picture"
+                        android:scaleType="centerCrop"
+                        tools:src="@drawable/ic_profile" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/textViewChangePhoto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="24dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="Change Photo"
+                    android:textColor="?attr/colorPrimary"
+                    android:textStyle="bold" />
+
+                <!-- Display Name -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MealMate.TextInputLayout.OutlinedBox.Rounded"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginBottom="16dp"
+                    android:hint="Display Name">
 
-            <!-- Email -->
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MealMate.TextInputLayout.OutlinedBox.Rounded"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Email">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextDisplayName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextEmail"
+                <!-- Email -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MealMate.TextInputLayout.OutlinedBox.Rounded"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:focusable="false"
-                    android:textColor="@color/gray_600"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginBottom="16dp"
+                    android:hint="Email">
 
-            <!-- Update Button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonUpdateProfile"
-                style="@style/Widget.Material3.Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:paddingVertical="12dp"
-                android:text="Save Changes" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"
+                        android:textColor="@color/gray_600" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Security Separator -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_marginBottom="16dp"
-                android:text="Security"
-                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                android:textColor="?attr/colorOnSurfaceVariant" />
+                <!-- Update Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonUpdateProfile"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:paddingVertical="12dp"
+                    android:text="Save Changes" />
 
-            <!-- Change Password -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonChangePassword"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="Change Password" />
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="32dp"
+                    android:background="?attr/colorOutlineVariant" />
 
-            <!-- Logout -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonLogout"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:text="Logout"
-                android:textColor="?attr/colorError" />
+                <!-- Security Section Title -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="Security"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:textColor="?attr/colorOnSurfaceVariant" />
 
-            <ProgressBar
-                android:id="@+id/progressBarProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:visibility="gone" />
+                <!-- Change Password -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonChangePassword"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="Change Password" />
 
+                <!-- Logout -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonLogout"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:paddingVertical="12dp"
+                    android:text="Logout"
+                    app:backgroundTint="@color/red_600" />
+
+                <ProgressBar
+                    android:id="@+id/progressBarProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

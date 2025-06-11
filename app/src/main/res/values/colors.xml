@@ -34,4 +34,5 @@
 
     <!-- Custom colors -->
     <color name="red_600">#D32F2F</color>
+    <color name="logo_background_blue">#303F9F</color>
 </resources>

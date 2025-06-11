@@ -47,7 +47,7 @@ public class MealPlanFragment extends Fragment {
     private final List<View> weekDayViews = new ArrayList<>();
 
     private Map<String, LinearLayout> dayLayouts;
-    private Map<String, MaterialCardView> addButtons;
+    private Map<String, LinearLayout> addButtons;
     private String selectedDay;
     private List<Recipe> availableRecipes;
 
@@ -130,7 +130,7 @@ public class MealPlanFragment extends Fragment {
         binding.buttonNextWeek.setOnClickListener(v -> mealPlanViewModel.goToNextWeek());
         binding.fabSaveMealPlan.setOnClickListener(v -> mealPlanViewModel.saveMealPlan());
 
-        for (Map.Entry<String, MaterialCardView> entry : addButtons.entrySet()) {
+        for (Map.Entry<String, LinearLayout> entry : addButtons.entrySet()) {
             String day = entry.getKey();
             entry.getValue().setOnClickListener(v -> showRecipeSelectionDialog(day));
         }
@@ -210,7 +210,6 @@ public class MealPlanFragment extends Fragment {
             View dayView = weekDayViews.get(i);
             TextView dayOfMonthText = dayView.findViewById(R.id.text_day_of_month);
             TextView dayOfWeekText = dayView.findViewById(R.id.text_day_of_week);
-            View selectionBg = dayView.findViewById(R.id.selection_background);
 
             Calendar itemCal = Calendar.getInstance();
             itemCal.setTime(weekDates.get(i));
@@ -221,11 +220,11 @@ public class MealPlanFragment extends Fragment {
                     today.get(Calendar.YEAR) == itemCal.get(Calendar.YEAR);
 
             if (isSelected) {
-                selectionBg.setVisibility(View.VISIBLE);
+                dayOfMonthText.setBackgroundResource(R.drawable.day_selected_background);
                 dayOfMonthText.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
                 dayOfWeekText.setTextColor(ContextCompat.getColor(requireContext(), R.color.purple_700));
             } else {
-                selectionBg.setVisibility(View.GONE);
+                dayOfMonthText.setBackgroundResource(android.R.color.transparent);
                 dayOfMonthText.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
                 dayOfWeekText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_600));
             }

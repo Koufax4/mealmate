@@ -4,45 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="@android:color/white"
+    android:fitsSystemWindows="true"
     tools:context=".ui.recipes.AddRecipeFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="16dp">
+        android:orientation="vertical">
 
         <!-- CUSTOM HEADER -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:paddingHorizontal="8dp"
             android:background="@color/white"
-            android:elevation="4dp">
+            android:elevation="4dp"
+            android:paddingHorizontal="8dp">
 
             <ImageButton
                 android:id="@+id/buttonBack"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_arrow_back_24"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="@color/purple_700"
-                android:contentDescription="Back"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_alignParentStart="true"/>
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                android:src="@drawable/ic_arrow_back_24"
+                app:tint="@color/purple_700" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@id/buttonBack"
                 android:text="Create New Recipe"
                 android:textColor="@color/purple_700"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_toEndOf="@id/buttonBack"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="8dp"/>
+                android:textStyle="bold" />
         </RelativeLayout>
 
         <LinearLayout
@@ -56,221 +55,286 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:background="@drawable/bg_dashed_border">
 
                     <ImageView
                         android:id="@+id/imageViewRecipe"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_add_photo_24"
-                        android:background="@color/gray_200"
-                        android:contentDescription="Recipe image" />
+                        android:contentDescription="Recipe image"
+                        android:scaleType="centerCrop" />
 
-                    <TextView
+                    <LinearLayout
                         android:id="@+id/textViewAddPhoto"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tap to add photo"
-                        android:textColor="@color/purple_700"
-                        android:textSize="14sp"
-                        android:layout_marginTop="-60dp"
-                        android:background="@color/white"
-                        android:padding="8dp"
-                        android:elevation="2dp" />
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                </LinearLayout>
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginBottom="8dp"
+                            android:src="@drawable/ic_add_photo_24"
+                            app:tint="?attr/colorPrimary" />
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tap to add photo"
+                            android:textColor="?attr/colorPrimary"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </FrameLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Recipe Name -->
-            <com.google.android.material.textfield.TextInputLayout
+            <!-- Basic Details Card -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                style="@style/Widget.MealMate.TextInputLayout.OutlinedBox.Rounded">
+                app:cardBackgroundColor="@color/gray_100"
+                app:cardCornerRadius="16dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextRecipeName"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Recipe Name"
-                    android:inputType="text"
-                    android:maxLines="1" />
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MealMate.TextInputLayout.OutlinedBox.Rounded"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Recipe Name">
 
-            <!-- Ingredients Section -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Ingredients"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/purple_700"
-                android:layout_marginBottom="8dp" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextRecipeName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapWords"
+                            android:maxLines="1" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewIngredients"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:nestedScrollingEnabled="false" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonAddIngredient"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Ingredient"
-                android:layout_gravity="center"
-                android:layout_marginBottom="16dp"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                app:icon="@drawable/ic_add_24" />
-
-            <!-- Instructions -->
-            <com.google.android.material.textfield.TextInputLayout
+            <!-- Ingredients Card -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                style="@style/Widget.MealMate.TextInputLayout.OutlinedBox.Rounded">
+                app:cardBackgroundColor="@color/gray_100"
+                app:cardCornerRadius="16dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextInstructions"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Cooking Instructions"
-                    android:inputType="textMultiLine"
-                    android:minLines="4"
-                    android:gravity="top" />
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="Ingredients"
+                        android:textAppearance="?attr/textAppearanceHeadline6"
+                        android:textColor="@color/purple_700" />
 
-            <!-- Optional Fields Section -->
-            <TextView
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewIngredients"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:nestedScrollingEnabled="false" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/buttonAddIngredient"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="Add Ingredient"
+                        app:icon="@drawable/ic_add_24"
+                        app:iconTint="?attr/colorPrimary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Instructions Card -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Additional Details (Optional)"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/purple_700"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/gray_100"
+                app:cardCornerRadius="16dp">
 
-            <LinearLayout
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="Cooking Instructions"
+                        android:textAppearance="?attr/textAppearanceHeadline6"
+                        android:textColor="@color/purple_700" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MealMate.TextInputLayout.OutlinedBox.Rounded"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextInstructions"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top"
+                            android:inputType="textMultiLine|textCapSentences"
+                            android:minLines="5" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Additional Details Card -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="24dp"
+                app:cardBackgroundColor="@color/gray_100"
+                app:cardCornerRadius="16dp">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    style="@style/Widget.MealMate.TextInputLayout.OutlinedBox.Rounded">
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextPrepTime"
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Prep Time"
-                        android:inputType="text"
-                        android:maxLines="1" />
+                        android:layout_marginBottom="16dp"
+                        android:text="Additional Details (Optional)"
+                        android:textAppearance="?attr/textAppearanceHeadline6"
+                        android:textColor="@color/purple_700" />
 
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    style="@style/Widget.MealMate.TextInputLayout.OutlinedBox.Rounded">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextCookTime"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Cook Time"
-                        android:inputType="text"
-                        android:maxLines="1" />
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MealMate.TextInputLayout.OutlinedBox.Rounded"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:hint="Prep Time"
+                            app:startIconDrawable="@drawable/ic_prep_time_24">
 
-            </LinearLayout>
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editTextPrepTime"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:maxLines="1" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="24dp">
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MealMate.TextInputLayout.OutlinedBox.Rounded"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:hint="Cook Time"
+                            app:startIconDrawable="@drawable/ic_cook_time_24">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    style="@style/Widget.MealMate.TextInputLayout.OutlinedBox.Rounded">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editTextCookTime"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:maxLines="1" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextServings"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Servings"
-                        android:inputType="number"
-                        android:maxLines="1" />
+                        android:orientation="horizontal">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MealMate.TextInputLayout.OutlinedBox.Rounded"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:hint="Servings"
+                            app:startIconDrawable="@drawable/ic_servings_24">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    style="@style/Widget.MealMate.TextInputLayout.OutlinedBox.Rounded">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editTextServings"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:maxLines="1" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextCategory"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Category"
-                        android:inputType="text"
-                        android:maxLines="1" />
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MealMate.TextInputLayout.OutlinedBox.Rounded"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:hint="Category"
+                            app:startIconDrawable="@drawable/ic_recipe_book_24">
 
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editTextCategory"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textCapWords"
+                                android:maxLines="1" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Action Buttons -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_marginTop="16dp">
+                android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonCancel"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginEnd="8dp"
-                    android:text="Cancel"
-                    style="@style/Widget.Material3.Button.OutlinedButton" />
+                    android:layout_weight="1"
+                    android:text="Cancel" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonSaveRecipe"
+                    style="@style/Widget.MaterialComponents.Button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginStart="8dp"
-                    android:text="Save Recipe"
-                    style="@style/Widget.Material3.Button" />
+                    android:layout_weight="1"
+                    android:text="Save Recipe" />
 
             </LinearLayout>
 
@@ -281,7 +345,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:visibility="visible" />
         </LinearLayout>
     </LinearLayout>
 
