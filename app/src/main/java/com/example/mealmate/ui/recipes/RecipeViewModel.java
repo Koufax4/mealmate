@@ -43,6 +43,15 @@ public class RecipeViewModel extends ViewModel {
     }
 
     /**
+     * Updates an existing recipe with optional new image.
+     *
+     * @param recipe The recipe to update
+     */
+    public void updateRecipe(Recipe recipe) {
+        recipeRepository.updateRecipe(recipe, selectedImageUri, saveRecipeResult);
+    }
+
+    /**
      * Fetches all recipes for the current user.
      */
     public void loadUserRecipes() {

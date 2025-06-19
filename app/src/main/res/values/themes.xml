@@ -1,17 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme with Material Design 3 support -->
-    <style name="Theme.MealMate" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.MealMate" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/firebase_red_700</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryContainer">@color/purple_100</item>
-        <item name="colorOnPrimaryContainer">@color/purple_900</item>
+        <item name="colorPrimaryContainer">@color/firebase_red_100</item>
+        <item name="colorOnPrimaryContainer">@color/firebase_red_900</item>
 
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondary">@color/firebase_yellow_700</item>
         <item name="colorOnSecondary">@color/black</item>
-        <item name="colorSecondaryContainer">@color/teal_100</item>
-        <item name="colorOnSecondaryContainer">@color/teal_900</item>
+        <item name="colorSecondaryContainer">@color/firebase_yellow_100</item>
+        <item name="colorOnSecondaryContainer">@color/firebase_yellow_900</item>
 
         <!-- Tertiary brand color. -->
         <item name="colorTertiary">@color/orange_500</item>

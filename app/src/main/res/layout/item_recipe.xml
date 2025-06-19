@@ -58,7 +58,7 @@
                 android:background="@drawable/rounded_background_purple"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
-                android:textColor="@color/purple_700"
+                android:textColor="?attr/colorPrimary"
                 android:textSize="12sp"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"

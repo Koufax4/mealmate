@@ -34,7 +34,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="Back"
                     android:src="@drawable/ic_arrow_back_24"
-                    app:tint="@color/purple_700" />
+                    app:tint="?attr/colorPrimary" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -43,7 +43,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_toEndOf="@id/buttonBack"
                     android:text="My Profile"
-                    android:textColor="@color/purple_700"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
             </RelativeLayout>

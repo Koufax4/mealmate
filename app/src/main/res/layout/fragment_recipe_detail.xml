@@ -29,7 +29,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Back"
                 android:src="@drawable/ic_arrow_back_24"
-                app:tint="@color/purple_700" />
+                app:tint="?attr/colorPrimary" />
 
             <TextView
                 android:id="@+id/textViewHeaderTitle"
@@ -42,9 +42,20 @@
                 android:maxLength="25"
                 android:singleLine="true"
                 android:text="Recipe Detail"
-                android:textColor="@color/purple_700"
+                android:textColor="?attr/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/buttonEdit"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Edit Recipe"
+                android:src="@drawable/ic_edit"
+                app:tint="?attr/colorPrimary" />
         </RelativeLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -111,7 +122,7 @@
                         android:background="@drawable/rounded_background_purple"
                         android:paddingHorizontal="12dp"
                         android:paddingVertical="6dp"
-                        android:textColor="@color/purple_700"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="12sp"
                         android:textStyle="bold"
                         android:visibility="gone"
@@ -213,7 +224,7 @@
                             android:layout_marginBottom="8dp"
                             android:text="Ingredients"
                             android:textAppearance="?attr/textAppearanceHeadline6"
-                            android:textColor="@color/purple_700" />
+                            android:textColor="?attr/colorPrimary" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recyclerViewIngredients"
@@ -241,7 +252,7 @@
                             android:layout_marginBottom="8dp"
                             android:text="Instructions"
                             android:textAppearance="?attr/textAppearanceHeadline6"
-                            android:textColor="@color/purple_700" />
+                            android:textColor="?attr/colorPrimary" />
 
                         <TextView
                             android:id="@+id/textViewInstructions"
@@ -321,7 +332,7 @@
         android:layout_margin="24dp"
         android:contentDescription="Add to Grocery List"
         android:src="@drawable/ic_shopping_cart_24"
-        app:backgroundTint="@color/purple_700"
+        app:backgroundTint="?attr/colorPrimary"
         app:tint="@color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

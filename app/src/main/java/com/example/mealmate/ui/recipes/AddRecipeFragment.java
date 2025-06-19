@@ -38,12 +38,23 @@ public class AddRecipeFragment extends Fragment {
     // Image selection launcher
     private ActivityResultLauncher<Intent> imagePickerLauncher;
 
+    // Edit mode fields
+    private boolean isEditMode = false;
+    private Recipe editingRecipe;
+    private String editRecipeId;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Initialize RecipeViewModel
         recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
+
+        // Check if we're in edit mode
+        if (getArguments() != null) {
+            editRecipeId = getArguments().getString("recipeId");
+            isEditMode = editRecipeId != null;
+        }
 
         // Initialize image picker launcher
         imagePickerLauncher = registerForActivityResult(
@@ -63,7 +74,7 @@ public class AddRecipeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         binding = FragmentAddRecipeBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -74,6 +85,12 @@ public class AddRecipeFragment extends Fragment {
         setupRecyclerView();
         setupClickListeners();
         observeViewModel();
+
+        // Update UI for edit mode
+        if (isEditMode) {
+            updateUIForEditMode();
+            loadRecipeForEditing();
+        }
     }
 
     private void setupRecyclerView() {
@@ -140,8 +157,16 @@ public class AddRecipeFragment extends Fragment {
             return;
         }
 
-        // Create recipe object
-        Recipe recipe = new Recipe();
+        // Create or update recipe object
+        Recipe recipe;
+        if (isEditMode && editingRecipe != null) {
+            // Use existing recipe for update
+            recipe = editingRecipe;
+        } else {
+            // Create new recipe
+            recipe = new Recipe();
+        }
+
         recipe.setName(recipeName);
         recipe.setIngredients(validIngredients);
         recipe.setInstructions(instructions);
@@ -150,11 +175,15 @@ public class AddRecipeFragment extends Fragment {
         String prepTime = binding.editTextPrepTime.getText().toString().trim();
         if (!prepTime.isEmpty()) {
             recipe.setPrepTime(prepTime);
+        } else {
+            recipe.setPrepTime(null); // Clear if empty in edit mode
         }
 
         String cookTime = binding.editTextCookTime.getText().toString().trim();
         if (!cookTime.isEmpty()) {
             recipe.setCookTime(cookTime);
+        } else {
+            recipe.setCookTime(null); // Clear if empty in edit mode
         }
 
         String servingsText = binding.editTextServings.getText().toString().trim();
@@ -163,17 +192,25 @@ public class AddRecipeFragment extends Fragment {
                 int servings = Integer.parseInt(servingsText);
                 recipe.setServings(servings);
             } catch (NumberFormatException e) {
-                // Ignore invalid servings input
+                recipe.setServings(0); // Reset to default if invalid
             }
+        } else {
+            recipe.setServings(0); // Reset to default if empty
         }
 
         String category = binding.editTextCategory.getText().toString().trim();
         if (!category.isEmpty()) {
             recipe.setCategory(category);
+        } else {
+            recipe.setCategory(null); // Clear if empty in edit mode
         }
 
-        // Save recipe
-        recipeViewModel.saveRecipe(recipe);
+        // Save or update recipe
+        if (isEditMode) {
+            recipeViewModel.updateRecipe(recipe);
+        } else {
+            recipeViewModel.saveRecipe(recipe);
+        }
     }
 
     private void observeViewModel() {
@@ -186,18 +223,83 @@ public class AddRecipeFragment extends Fragment {
 
                     case SUCCESS:
                         setLoading(false);
-                        showMessage("Recipe saved successfully!");
+                        String message = isEditMode ? "Recipe updated successfully!" : "Recipe saved successfully!";
+                        showMessage(message);
                         recipeViewModel.clearSaveRecipeResult();
                         Navigation.findNavController(requireView()).navigateUp();
                         break;
 
                     case ERROR:
                         setLoading(false);
-                        showMessage("Failed to save recipe: " + resource.message);
+                        String errorMessage = isEditMode ? "Failed to update recipe: " : "Failed to save recipe: ";
+                        showMessage(errorMessage + resource.message);
                         break;
                 }
             }
         });
+
+        // Observe recipe detail for edit mode
+        if (isEditMode) {
+            recipeViewModel.getRecipeDetailLiveData().observe(getViewLifecycleOwner(), resource -> {
+                if (resource != null) {
+                    switch (resource.status) {
+                        case LOADING:
+                            setLoading(true);
+                            break;
+
+                        case SUCCESS:
+                            setLoading(false);
+                            if (resource.data != null) {
+                                editingRecipe = resource.data;
+                                populateFormWithRecipe(resource.data);
+                            }
+                            break;
+
+                        case ERROR:
+                            setLoading(false);
+                            showMessage("Failed to load recipe: " + resource.message);
+                            break;
+                    }
+                }
+            });
+        }
+    }
+
+    private void populateFormWithRecipe(Recipe recipe) {
+        // Populate basic fields
+        binding.editTextRecipeName.setText(recipe.getName());
+        binding.editTextInstructions.setText(recipe.getInstructions());
+
+        // Populate optional fields
+        if (recipe.getPrepTime() != null) {
+            binding.editTextPrepTime.setText(recipe.getPrepTime());
+        }
+        if (recipe.getCookTime() != null) {
+            binding.editTextCookTime.setText(recipe.getCookTime());
+        }
+        if (recipe.getServings() > 0) {
+            binding.editTextServings.setText(String.valueOf(recipe.getServings()));
+        }
+        if (recipe.getCategory() != null) {
+            binding.editTextCategory.setText(recipe.getCategory());
+        }
+
+        // Populate ingredients
+        if (recipe.getIngredients() != null) {
+            ingredientAdapter.setIngredients(recipe.getIngredients());
+        }
+
+        // Load recipe image
+        if (recipe.getImageUrl() != null && !recipe.getImageUrl().isEmpty()) {
+            binding.textViewAddPhoto.setVisibility(View.GONE);
+            // Use Glide to load the image
+            com.bumptech.glide.Glide.with(this)
+                    .load(recipe.getImageUrl())
+                    .placeholder(com.example.mealmate.R.drawable.ic_recipe_placeholder_24)
+                    .error(com.example.mealmate.R.drawable.ic_recipe_placeholder_24)
+                    .centerCrop()
+                    .into(binding.imageViewRecipe);
+        }
     }
 
     private void setLoading(boolean isLoading) {
@@ -213,6 +315,18 @@ public class AddRecipeFragment extends Fragment {
             Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         } else {
             Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void updateUIForEditMode() {
+        // Update title and button text
+        binding.textViewHeaderTitle.setText("Edit Recipe");
+        binding.buttonSaveRecipe.setText("Update Recipe");
+    }
+
+    private void loadRecipeForEditing() {
+        if (editRecipeId != null) {
+            recipeViewModel.loadRecipeById(editRecipeId);
         }
     }
 

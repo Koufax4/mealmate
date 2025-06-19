@@ -63,23 +63,11 @@
         <action
             android:id="@+id/action_homeFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
-        <!-- Map navigation action - COMMENTED OUT -->
-        <!-- <action
+        <!-- Map navigation action -->
+        <action
             android:id="@+id/action_navigation_home_to_mapFragment"
-            app:destination="@id/mapFragment" /> -->
+            app:destination="@id/mapFragment" />
     </fragment>
-
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.mealmate.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.mealmate.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
 
     <!-- Recipe Fragments -->
     <fragment
@@ -99,7 +87,12 @@
         android:id="@+id/addRecipeFragment"
         android:name="com.example.mealmate.ui.recipes.AddRecipeFragment"
         android:label="Add Recipe"
-        tools:layout="@layout/fragment_add_recipe" />
+        tools:layout="@layout/fragment_add_recipe" >
+        <argument
+            android:name="recipeId"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/recipeDetailFragment"
@@ -113,6 +106,9 @@
             android:name="recipeName"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_recipeDetailFragment_to_addRecipeFragment"
+            app:destination="@id/addRecipeFragment" />
     </fragment>
 
     <!-- Meal Plan Fragment -->
@@ -146,11 +142,11 @@
             app:popUpToInclusive="true" />
     </fragment>
 
-    <!-- Map Fragment - COMMENTED OUT -->
-    <!-- <fragment
+    <!-- Map Fragment -->
+    <fragment
         android:id="@+id/mapFragment"
         android:name="com.example.mealmate.ui.map.MapFragment"
         android:label="Store Locations"
-        tools:layout="@layout/fragment_map" /> -->
+        tools:layout="@layout/fragment_map" />
 
 </navigation>

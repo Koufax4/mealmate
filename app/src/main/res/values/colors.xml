@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Primary colors -->
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="purple_100">#F3E5F5</color>
-    <color name="purple_900">#4A148C</color>
+    <!-- Primary (Red) - Firebase Style -->
+    <color name="firebase_red_100">#FFCDD2</color>
+    <color name="firebase_red_200">#EF9A9A</color>
+    <color name="firebase_red_500">#F44336</color>
+    <color name="firebase_red_700">#D32F2F</color>
+    <color name="firebase_red_900">#B71C1C</color>
 
-    <!-- Secondary colors -->
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_500">#009688</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="teal_100">#E0F2F1</color>
-    <color name="teal_900">#004D40</color>
+    <!-- Secondary (Yellow/Amber) - Firebase Style -->
+    <color name="firebase_yellow_100">#FFECB3</color>
+    <color name="firebase_yellow_200">#FFE082</color>
+    <color name="firebase_yellow_500">#FFC107</color>
+    <color name="firebase_yellow_700">#FFB300</color>
+    <color name="firebase_yellow_900">#FF8F00</color>
 
     <!-- Tertiary colors -->
     <color name="orange_500">#FF9800</color>
@@ -33,6 +33,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <!-- Custom colors -->
+    <color name="logo_orange">#FF9400</color>
     <color name="red_600">#D32F2F</color>
-    <color name="logo_background_blue">#303F9F</color>
+    <color name="logo_background_blue">#FFC107</color>
 </resources>

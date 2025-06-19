@@ -19,6 +19,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 
+import android.graphics.Color;
+import com.google.android.material.color.MaterialColors;
+
 import com.example.mealmate.databinding.ActivityMainBinding;
 import com.example.mealmate.ui.auth.AuthViewModel;
 
@@ -83,11 +86,12 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.nav_recipe).setOnClickListener(v -> navigateTo(R.id.recipeListFragment));
         findViewById(R.id.nav_meal_plan).setOnClickListener(v -> navigateTo(R.id.mealPlanFragment));
         findViewById(R.id.nav_grocery).setOnClickListener(v -> navigateTo(R.id.groceryListFragment));
-//        findViewById(R.id.nav_map).setOnClickListener(v -> navigateTo(R.id.mapFragment));
+        findViewById(R.id.nav_map).setOnClickListener(v -> navigateTo(R.id.mapFragment));
     }
 
     private void navigateTo(int destinationId) {
-        if (navController.getCurrentDestination() != null && navController.getCurrentDestination().getId() != destinationId) {
+        if (navController.getCurrentDestination() != null
+                && navController.getCurrentDestination().getId() != destinationId) {
             navController.navigate(destinationId);
         }
     }
@@ -99,16 +103,16 @@ public class MainActivity extends AppCompatActivity {
 
             if (itemId == R.id.nav_home && destinationId == R.id.navigation_home) {
                 isSelected = true;
-            } else if (itemId == R.id.nav_recipe && (destinationId == R.id.recipeListFragment || destinationId == R.id.addRecipeFragment || destinationId == R.id.recipeDetailFragment)) {
+            } else if (itemId == R.id.nav_recipe && (destinationId == R.id.recipeListFragment
+                    || destinationId == R.id.addRecipeFragment || destinationId == R.id.recipeDetailFragment)) {
                 isSelected = true;
             } else if (itemId == R.id.nav_meal_plan && destinationId == R.id.mealPlanFragment) {
                 isSelected = true;
             } else if (itemId == R.id.nav_grocery && destinationId == R.id.groceryListFragment) {
                 isSelected = true;
+            } else if (itemId == R.id.nav_map && destinationId == R.id.mapFragment) {
+                isSelected = true;
             }
-//            else if (itemId == R.id.nav_map && destinationId == R.id.mapFragment) {
-//                isSelected = true;
-//            }
 
             setNavItemSelected(item, isSelected);
         }
@@ -120,7 +124,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (isSelected) {
             navItem.setBackgroundResource(R.drawable.nav_item_selected_background);
-            icon.setColorFilter(ContextCompat.getColor(this, R.color.purple_700));
+            icon.setColorFilter(
+                    MaterialColors.getColor(this, com.google.android.material.R.attr.colorPrimary, Color.BLACK));
             text.setVisibility(View.VISIBLE);
         } else {
             navItem.setBackgroundResource(R.drawable.nav_item_background);

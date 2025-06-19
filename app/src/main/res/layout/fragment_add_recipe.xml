@@ -30,16 +30,17 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Back"
                 android:src="@drawable/ic_arrow_back_24"
-                app:tint="@color/purple_700" />
+                app:tint="?attr/colorPrimary" />
 
             <TextView
+                android:id="@+id/textViewHeaderTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="8dp"
                 android:layout_toEndOf="@id/buttonBack"
                 android:text="Create New Recipe"
-                android:textColor="@color/purple_700"
+                android:textColor="?attr/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </RelativeLayout>
@@ -147,7 +148,7 @@
                         android:layout_marginBottom="8dp"
                         android:text="Ingredients"
                         android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:textColor="@color/purple_700" />
+                        android:textColor="?attr/colorPrimary" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerViewIngredients"
@@ -188,7 +189,7 @@
                         android:layout_marginBottom="8dp"
                         android:text="Cooking Instructions"
                         android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:textColor="@color/purple_700" />
+                        android:textColor="?attr/colorPrimary" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MealMate.TextInputLayout.OutlinedBox.Rounded"
@@ -226,7 +227,7 @@
                         android:layout_marginBottom="16dp"
                         android:text="Additional Details (Optional)"
                         android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:textColor="@color/purple_700" />
+                        android:textColor="?attr/colorPrimary" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

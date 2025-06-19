@@ -19,9 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_arrow_back_24"
-            app:navigationIconTint="@color/purple_900"
+            app:navigationIconTint="?attr/colorOnPrimaryContainer"
             app:title="Meal Planner"
-            app:titleTextColor="@color/purple_900" />
+            app:titleTextColor="?attr/colorOnPrimaryContainer" />
 
         <!-- Week Navigation Header -->
         <LinearLayout
@@ -40,7 +40,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
-                app:cardBackgroundColor="@color/purple_100"
+                app:cardBackgroundColor="?attr/colorPrimaryContainer"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="0dp">
 
@@ -50,7 +50,7 @@
                     android:layout_gravity="center"
                     android:contentDescription="Previous Week"
                     android:src="@drawable/ic_arrow_left_24"
-                    app:tint="@color/purple_700" />
+                    app:tint="?attr/colorPrimary" />
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
@@ -60,7 +60,7 @@
                 android:layout_weight="1"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center"
-                android:textColor="@color/purple_900"
+                android:textColor="?attr/colorOnPrimaryContainer"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:text="06/09 - 06/15" />
@@ -72,7 +72,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
-                app:cardBackgroundColor="@color/purple_100"
+                app:cardBackgroundColor="?attr/colorPrimaryContainer"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="0dp">
 
@@ -82,7 +82,7 @@
                     android:layout_gravity="center"
                     android:contentDescription="Next Week"
                     android:src="@drawable/ic_arrow_right_24"
-                    app:tint="@color/purple_700" />
+                    app:tint="?attr/colorPrimary" />
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
@@ -156,7 +156,7 @@
         android:layout_margin="16dp"
         android:text="Save Plan"
         android:textColor="@color/white"
-        app:backgroundTint="@color/purple_500"
+        app:backgroundTint="?attr/colorPrimary"
         app:icon="@drawable/ic_save_24"
         app:iconTint="@color/white" />
 

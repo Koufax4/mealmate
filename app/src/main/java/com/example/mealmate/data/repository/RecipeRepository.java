@@ -73,6 +73,41 @@ public class RecipeRepository {
     }
 
     /**
+     * Updates an existing recipe in Firestore. If a new image URI is provided,
+     * uploads it first.
+     *
+     * @param recipe         The recipe to update
+     * @param imageUri       The new local image URI (optional, null to keep
+     *                       existing image)
+     * @param resultLiveData LiveData to notify about the operation result
+     */
+    public void updateRecipe(Recipe recipe, Uri imageUri, MutableLiveData<AuthResource<Recipe>> resultLiveData) {
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser == null) {
+            resultLiveData.setValue(AuthResource.error("User not authenticated", null));
+            return;
+        }
+
+        if (recipe.getRecipeId() == null) {
+            resultLiveData.setValue(AuthResource.error("Recipe ID is required for updates", null));
+            return;
+        }
+
+        resultLiveData.setValue(AuthResource.loading(null));
+
+        // Ensure user ID is set
+        recipe.setUserId(currentUser.getUid());
+
+        if (imageUri != null) {
+            // Upload new image first, then update recipe
+            uploadImage(imageUri, recipe, resultLiveData);
+        } else {
+            // Update recipe directly (keep existing image)
+            saveRecipeToFirestore(recipe, resultLiveData);
+        }
+    }
+
+    /**
      * Uploads an image to Firebase Storage and then saves the recipe.
      */
     private void uploadImage(Uri imageUri, Recipe recipe, MutableLiveData<AuthResource<Recipe>> resultLiveData) {

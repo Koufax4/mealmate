@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:textAppearance="?attr/textAppearanceHeadline6"
-            android:textColor="@color/purple_900"
+            android:textColor="?attr/colorOnPrimaryContainer"
             tools:text="Monday" />
 
         <LinearLayout

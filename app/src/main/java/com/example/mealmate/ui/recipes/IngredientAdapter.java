@@ -99,6 +99,20 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         return new ArrayList<>(ingredients);
     }
 
+    /**
+     * Sets the ingredients list for edit mode.
+     */
+    public void setIngredients(List<Ingredient> ingredientList) {
+        ingredients.clear();
+        if (ingredientList != null && !ingredientList.isEmpty()) {
+            ingredients.addAll(ingredientList);
+        } else {
+            // Add at least one empty ingredient if list is empty
+            ingredients.add(new Ingredient("", 0, ""));
+        }
+        notifyDataSetChanged();
+    }
+
     class IngredientViewHolder extends RecyclerView.ViewHolder {
 
         private final TextInputEditText editTextName;

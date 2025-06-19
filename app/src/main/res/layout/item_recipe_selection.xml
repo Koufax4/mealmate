@@ -25,7 +25,7 @@
             android:text="Recipe Name"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="@color/purple_900"
+            android:textColor="?attr/colorOnPrimaryContainer"
             android:fontFamily="sans-serif-medium" />
 
         <TextView

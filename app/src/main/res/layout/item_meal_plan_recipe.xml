@@ -21,14 +21,14 @@
         android:layout_marginEnd="12dp"
         android:contentDescription="Recipe Icon"
         android:src="@drawable/ic_restaurant_24"
-        app:tint="@color/teal_700" />
+        app:tint="?attr/colorSecondary" />
 
     <TextView
         android:id="@+id/text_recipe_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textColor="@color/teal_900"
+        android:textColor="?attr/colorOnSecondaryContainer"
         android:textSize="16sp"
         tools:text="Delicious Pasta Carbonara" />
 

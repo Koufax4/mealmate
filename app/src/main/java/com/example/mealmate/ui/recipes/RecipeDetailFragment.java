@@ -55,7 +55,7 @@ public class RecipeDetailFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         binding = FragmentRecipeDetailBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -86,6 +86,7 @@ public class RecipeDetailFragment extends Fragment {
         binding.buttonRetry.setOnClickListener(v -> loadRecipeDetail());
         binding.buttonBack.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
         binding.fabAddToGroceryList.setOnClickListener(v -> addToGroceryList());
+        binding.buttonEdit.setOnClickListener(v -> editRecipe());
     }
 
     private void loadRecipeDetail() {
@@ -188,7 +189,8 @@ public class RecipeDetailFragment extends Fragment {
             servingsVisible = false;
         }
 
-        binding.separator1.setVisibility(prepTimeVisible && (cookTimeVisible || servingsVisible) ? View.VISIBLE : View.GONE);
+        binding.separator1
+                .setVisibility(prepTimeVisible && (cookTimeVisible || servingsVisible) ? View.VISIBLE : View.GONE);
         binding.separator2.setVisibility(cookTimeVisible && servingsVisible ? View.VISIBLE : View.GONE);
 
         setOptionalField(binding.textViewCategory, recipe.getCategory(), "");
@@ -240,6 +242,17 @@ public class RecipeDetailFragment extends Fragment {
         }
 
         groceryViewModel.addIngredientsToGroceryList(currentRecipe.getIngredients());
+    }
+
+    private void editRecipe() {
+        if (currentRecipe != null && recipeId != null) {
+            Bundle args = new Bundle();
+            args.putString("recipeId", recipeId);
+            Navigation.findNavController(requireView())
+                    .navigate(R.id.action_recipeDetailFragment_to_addRecipeFragment, args);
+        } else {
+            showMessage("Recipe data not available for editing");
+        }
     }
 
     @Override

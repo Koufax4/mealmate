@@ -83,13 +83,11 @@ public class HomeFragment extends Fragment {
     private void setupModernHeader() {
         updateUserInfo();
 
-        binding.buttonSettings.setOnClickListener(v ->
-                NavHostFragment.findNavController(HomeFragment.this)
-                        .navigate(R.id.action_homeFragment_to_profileFragment));
+        binding.buttonSettings.setOnClickListener(v -> NavHostFragment.findNavController(HomeFragment.this)
+                .navigate(R.id.action_homeFragment_to_profileFragment));
 
-        binding.imageProfile.setOnClickListener(v ->
-                NavHostFragment.findNavController(HomeFragment.this)
-                        .navigate(R.id.action_homeFragment_to_profileFragment));
+        binding.imageProfile.setOnClickListener(v -> NavHostFragment.findNavController(HomeFragment.this)
+                .navigate(R.id.action_homeFragment_to_profileFragment));
     }
 
     private void setupDynamicGreeting() {
@@ -117,20 +115,17 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupNavigationCards() {
-        binding.cardMyRecipes.setOnClickListener(v ->
-                NavHostFragment.findNavController(HomeFragment.this)
-                        .navigate(R.id.action_navigation_home_to_recipeListFragment));
+        binding.cardMyRecipes.setOnClickListener(v -> NavHostFragment.findNavController(HomeFragment.this)
+                .navigate(R.id.action_navigation_home_to_recipeListFragment));
 
-        binding.cardMealPlanner.setOnClickListener(v ->
-                NavHostFragment.findNavController(HomeFragment.this)
-                        .navigate(R.id.action_navigation_home_to_mealPlanFragment));
+        binding.cardMealPlanner.setOnClickListener(v -> NavHostFragment.findNavController(HomeFragment.this)
+                .navigate(R.id.action_navigation_home_to_mealPlanFragment));
 
-        binding.cardGroceryLists.setOnClickListener(v ->
-                NavHostFragment.findNavController(HomeFragment.this)
-                        .navigate(R.id.action_navigation_home_to_groceryListFragment));
+        binding.cardGroceryLists.setOnClickListener(v -> NavHostFragment.findNavController(HomeFragment.this)
+                .navigate(R.id.action_navigation_home_to_groceryListFragment));
 
-        binding.cardStoreLocations.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Store Locations feature coming soon!", Toast.LENGTH_SHORT).show());
+        binding.cardStoreLocations.setOnClickListener(v -> NavHostFragment.findNavController(HomeFragment.this)
+                .navigate(R.id.action_navigation_home_to_mapFragment));
     }
 
     private void setupObservers() {

@@ -12,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import android.graphics.Color;
+import com.google.android.material.color.MaterialColors;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
@@ -71,7 +74,7 @@ public class MealPlanFragment extends Fragment {
     }
 
     private void setupWeekView() {
-        String[] dayNames = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+        String[] dayNames = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
         binding.weekDaysContainer.removeAllViews();
         weekDayViews.clear();
 
@@ -82,7 +85,6 @@ public class MealPlanFragment extends Fragment {
             binding.weekDaysContainer.addView(dayView);
         }
     }
-
 
     private void initializeDayLayouts() {
         dayLayouts = new HashMap<>();
@@ -137,15 +139,16 @@ public class MealPlanFragment extends Fragment {
     }
 
     private void observeViewModel() {
-        mealPlanViewModel.getRecipesLiveData().observe(getViewLifecycleOwner(), (Observer<AuthResource<List<Recipe>>>) resource -> {
-            if (resource != null && resource.status == AuthResource.Status.SUCCESS) {
-                availableRecipes = resource.data;
-                mealPlanViewModel.populateRecipeMap(availableRecipes);
-                mealPlanViewModel.loadCurrentWeekMealPlan();
-            } else if (resource != null && resource.status == AuthResource.Status.ERROR) {
-                showError("Failed to load recipes: " + resource.message);
-            }
-        });
+        mealPlanViewModel.getRecipesLiveData().observe(getViewLifecycleOwner(),
+                (Observer<AuthResource<List<Recipe>>>) resource -> {
+                    if (resource != null && resource.status == AuthResource.Status.SUCCESS) {
+                        availableRecipes = resource.data;
+                        mealPlanViewModel.populateRecipeMap(availableRecipes);
+                        mealPlanViewModel.loadCurrentWeekMealPlan();
+                    } else if (resource != null && resource.status == AuthResource.Status.ERROR) {
+                        showError("Failed to load recipes: " + resource.message);
+                    }
+                });
 
         mealPlanViewModel.getCurrentMealPlanLiveData().observe(getViewLifecycleOwner(), resource -> {
             if (resource != null) {
@@ -188,7 +191,8 @@ public class MealPlanFragment extends Fragment {
             clearDayRecipes(dayLayout);
         }
 
-        if (mealPlan == null) return;
+        if (mealPlan == null)
+            return;
 
         if (mealPlan.getDays() != null) {
             for (Map.Entry<String, LinearLayout> entry : dayLayouts.entrySet()) {
@@ -222,7 +226,8 @@ public class MealPlanFragment extends Fragment {
             if (isSelected) {
                 dayOfMonthText.setBackgroundResource(R.drawable.day_selected_background);
                 dayOfMonthText.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
-                dayOfWeekText.setTextColor(ContextCompat.getColor(requireContext(), R.color.purple_700));
+                dayOfWeekText.setTextColor(MaterialColors.getColor(requireContext(),
+                        com.google.android.material.R.attr.colorPrimary, Color.BLACK));
             } else {
                 dayOfMonthText.setBackgroundResource(android.R.color.transparent);
                 dayOfMonthText.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
@@ -254,7 +259,8 @@ public class MealPlanFragment extends Fragment {
         recipeView.setOnClickListener(v -> {
             Bundle args = new Bundle();
             args.putString("recipeId", recipeId);
-            NavHostFragment.findNavController(this).navigate(R.id.action_mealPlanFragment_to_recipeDetailFragment, args);
+            NavHostFragment.findNavController(this).navigate(R.id.action_mealPlanFragment_to_recipeDetailFragment,
+                    args);
         });
 
         dayLayout.addView(recipeView, dayLayout.getChildCount() - 1);
@@ -267,7 +273,8 @@ public class MealPlanFragment extends Fragment {
         }
         selectedDay = day;
         RecipeSelectionDialogFragment dialog = RecipeSelectionDialogFragment.newInstance(availableRecipes);
-        dialog.setOnRecipeSelectedListener(recipe -> mealPlanViewModel.assignRecipeToDay(selectedDay, recipe.getRecipeId()));
+        dialog.setOnRecipeSelectedListener(
+                recipe -> mealPlanViewModel.assignRecipeToDay(selectedDay, recipe.getRecipeId()));
         dialog.show(getParentFragmentManager(), "RecipeSelectionDialog");
     }
 
